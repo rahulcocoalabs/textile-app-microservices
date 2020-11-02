@@ -1,4 +1,5 @@
 const auth = require('../middleware/adminAuth.js');
+const userAuth = require('../middleware/auth.js');
 var config = require('../../config/app.config.js');
 var multer = require('multer');
 var mime = require('mime-types');
@@ -17,7 +18,7 @@ module.exports = (app) => {
     const brands = require('../controllers/brands.controller');
     
   
-    app.post('/brands/create', ImageUpload.single('image'), brands.create);
-    app.get('/brands/list', auth, brands.list);
+    app.post('/brands/create', auth,ImageUpload.single('image'), brands.create);
+    app.get('/brands/list', userAuth, brands.list);
 
 }
