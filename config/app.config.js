@@ -31,6 +31,11 @@ module.exports = {
     imageUploadPath: commonImageStorePath + 'categories/',
     imageBase: commonStorePath + '/categories/'
   },
+  brands: {
+    //imageUploadPath: 'uploads',
+   imageUploadPath: commonImageStorePath + 'categories/',
+   imageBase: commonStorePath + '/brands/'
+ },
   products: {
     // imageUploadPath: 'uploads',
     imageUploadPath: commonImageStorePath + 'products/',
