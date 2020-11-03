@@ -7,7 +7,15 @@ const variants = mongoose.Schema({
     parent: {
 		type: mongoose.Schema.Types.ObjectId,
 		ref: 'Product'
-	},
+    },
+    color: {
+		type: mongoose.Schema.Types.ObjectId,
+		ref: 'Color'
+    },
+    size: {
+		type: mongoose.Schema.Types.ObjectId,
+		ref: 'Size'
+    },
     costPrice: Number,
     sellingPrice:Number,
     isAvailable: Boolean,

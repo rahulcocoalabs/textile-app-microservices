@@ -1,7 +1,8 @@
 
 const config = require('../../config/app.config');
 const ProductModel = require('../models/product.model');
-
+const ColorModel = require('../models/color.model');
+const SizeModel = require('../models/size.model');
 const paramsConfig = require('../../config/params.config');
 var CategoryModel = require('../models/categories.model');
 var VariantModel = require('../models/variant.model');
@@ -20,7 +21,9 @@ exports.create = async (req, res) => {
     var sellingPrice = req.body.sellingPrice;
     var description = req.body.description;
     var costPrice = req.body.costPrice;
-    if (!name || !files || !qty || !sellingPrice || !costPrice || !description) {
+    var category = req.body.category;
+    var brand = req.body.brand;
+    if (!name || !files || !qty || !sellingPrice || !costPrice || !description || !category || !brand)  {
         var errors = [];
         if (!name) {
             errors.push({
@@ -46,6 +49,18 @@ exports.create = async (req, res) => {
                 message: 'costPrice cannot be empty'
             })
         }
+        if (!category) {
+            errors.push({
+                field: 'category',
+                message: 'category cannot be empty'
+            })
+        }
+        if (!brand) {
+            errors.push({
+                field: 'brand',
+                message: 'brand cannot be empty'
+            })
+        }
         if (!files) {
             errors.push({
                 field: 'images',
@@ -63,7 +78,9 @@ exports.create = async (req, res) => {
     var files = req.files;
     var images = [];
     if (files) {
+        
         if (files.images && files.images.length > 0) {
+            
             var len = files.images.length;
             var i = 0;
             while (i < len) {
@@ -72,6 +89,7 @@ exports.create = async (req, res) => {
             }
         }
     }
+    
     name = name.trim();
     var checkProductName = await ProductModel.find({
         name: name,
@@ -88,12 +106,13 @@ exports.create = async (req, res) => {
             name: name,
             image: images,
             status: 1,
-            category: params.category,
+            category: category,
+            brand:brand,
             sellingPrice: params.sellingPrice,
             costPrice: params.costPrice,
             stockAvailable: params.qty,
             description: params.description,
-            variantsExist: params.variantsExist || false,
+            variantsExist: true,
             tsCreatedAt: Date.now(),
             tsModifiedAt: null
         });
@@ -825,4 +844,128 @@ exports.listVariants = async (req, res) => {
         items: variantData,
         message: 'Variant list'
     })
+}
+
+
+exports.createColor = async (req, res) => {
+    
+    var name = req.body.name;
+    var value = req.body.value;
+    
+    if (!name ||  !value) {
+        var errors = [];
+        
+        if (!name) {
+            errors.push({
+                field: 'name',
+                message: 'name cannot be empty'
+            })
+        }
+        if (!value) {
+            errors.push({
+                field: 'value',
+                message: 'value cannot be empty'
+            })
+        }
+       
+        return res.status(400).send({
+            success: 0,
+            message: errors
+        })
+    }
+    
+    name = name.trim();
+    var checkColorName = await ColorModel.find({
+        name: name,
+        status: 1
+    });
+    if (checkColorName.length > 0) {
+        return res.status(400).send({
+            success: 0,
+            message: 'Product name exists'
+        })
+    }
+    try {
+        const newColor = new ColorModel({
+            name: name,
+            value: value,
+            status: 1,
+            
+            tsCreatedAt: Date.now(),
+            tsModifiedAt: null
+        });
+        var addColor = await newColor.save();
+        res.status(200).send({
+            success: 1,
+            id: addColor._id,
+            message: 'Product added successfully'
+        });
+    } catch (err) {
+        res.status(500).send({
+            success: 1,
+            message: err.message
+        });
+    }
+}
+
+
+exports.createSize = async (req, res) => {
+    
+    var name = req.body.name;
+    var value = req.body.value;
+    
+    if (!name ||  !value) {
+        var errors = [];
+        
+        if (!name) {
+            errors.push({
+                field: 'name',
+                message: 'name cannot be empty'
+            })
+        }
+        if (!value) {
+            errors.push({
+                field: 'value',
+                message: 'value cannot be empty'
+            })
+        }
+       
+        return res.status(400).send({
+            success: 0,
+            message: errors
+        })
+    }
+    
+    name = name.trim();
+    var checkSize = await SizeModel.find({
+        name: name,
+        status: 1
+    });
+    if (checkSize.length > 0) {
+        return res.status(400).send({
+            success: 0,
+            message: 'Product name exists'
+        })
+    }
+    try {
+        const newSize = new SizeModel({
+            name: name,
+            value: value,
+            status: 1,
+            
+            tsCreatedAt: Date.now(),
+            tsModifiedAt: null
+        });
+        var addSize = await newSize.save();
+        res.status(200).send({
+            success: 1,
+            id: addSize._id,
+            message: 'Product added successfully'
+        });
+    } catch (err) {
+        res.status(500).send({
+            success: 1,
+            message: err.message
+        });
+    }
 }

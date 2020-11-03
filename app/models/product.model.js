@@ -24,23 +24,24 @@ const product = mongoose.Schema({
 	name: String,
 	description: String,
 	quantity: Number,
-	category: {
+	brand: {
 		type: mongoose.Schema.Types.ObjectId,
-		ref: 'Category'
+		ref: 'Brand'
 	},
-	image: String,
+	image: [String],
 	subImages: Array,
-	brand:String,
+
 	costPrice: Number,
 	sellingPrice:Number,
 	variantsExists: Boolean,
-	variants:[{
+	
+	variant:{
 		type: mongoose.Schema.Types.ObjectId,
 		ref: 'Variant'
-	}],
-	addOns: [{
+	},
+	categories:[{
 		type: mongoose.Schema.Types.ObjectId,
-		ref: 'Product'
+		ref: 'Category'
 	}],
 	discount: Number,
 	sku: String,

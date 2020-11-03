@@ -28,4 +28,6 @@ module.exports = (app) => {
     app.delete('/adminProducts/variant/:id/delete', auth, products.deleteVariant);
     app.get('/adminProducts/:id/variant/list', auth, products.listVariants);
 
+    app.post('/adminProducts/createsize', auth, products.createSize);
+    app.post('/adminProducts/createcolor', auth, products.createColor);
 }

@@ -1,10 +1,10 @@
 const mongoose = require('mongoose');
 
-const bannerSchema = mongoose.Schema({   
+const brandSchema = mongoose.Schema({   
     name: String,
     image:String,
     status: Number,
     tSCreatedAt: Number,
     tSModifiedAt: Number
 });
-module.exports = mongoose.model('Banner', bannerSchema, "Banners");
+module.exports = mongoose.model('Brand', brandSchema, "Brands");

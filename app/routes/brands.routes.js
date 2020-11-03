@@ -19,6 +19,6 @@ module.exports = (app) => {
     
   
     app.post('/brands/create', auth,ImageUpload.single('image'), brands.create);
-    app.get('/brands/list', userAuth, brands.list);
+    app.get('/brands/list',  brands.list);
 
 }

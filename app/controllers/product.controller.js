@@ -1,6 +1,7 @@
 const Product = require('../models/product.model');
 const Category = require('../models/categories.model');
 const Reviews = require('../models/review.model');
+const Brand = require('../models/brands.model');
 const Banner = require('../models/banner.model');
 const User = require('../models/user.model');
 const Variant = require('../models/variant.model');
@@ -63,26 +64,19 @@ exports.list = async (req, res) => {
             }
         }]
     };
-    if (filterValue == Constants.veg) {
-        filter['isVegOnly'] = true;
-        filter['status'] = 1;
-    } else if (filterValue == Constants.nonVeg) {
-        filter['isVegOnly'] = false;
-        filter['status'] = 1;
-    } else if (filterValue == Constants.combo) {
-        filter['isCombo'] = true;
-        filter['status'] = 1;
-    }
+    
     let projection = {
         name: 1,
         image: 1,
         category: 1,
         sellingPrice: 1,
-        averageRating: 1
+        costPrice:1,
+        averageRating: 1,
+        brand:1
     };
     try {
         let products = await Product.find(filter, projection).populate({
-            path: 'category',
+            path: 'brand',
             select: 'name'
         }).skip(offset).limit(perPage).sort(sort).lean();
         let itemsCount = await Product.countDocuments(filter);

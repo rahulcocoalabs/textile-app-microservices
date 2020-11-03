@@ -60,8 +60,8 @@ exports.create = async (req, res) => {
 }
 
 exports.list = async (req, res) => {
-    let userDataz = req.identity.data;
-    let userId = userDataz.id;
+   // let userDataz = req.identity.data;
+  //  let userId = userDataz.id;
     let findCriteria = {};
     
     findCriteria.status = 1;
