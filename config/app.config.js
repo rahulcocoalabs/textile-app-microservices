@@ -31,7 +31,7 @@ module.exports = {
     imageUploadPath: commonImageStorePath + 'categories/',
     imageBase: commonStorePath + '/categories/'
   },
-  offfers: {
+  offers: {
     //imageUploadPath: 'uploads',
      imageUploadPath: commonImageStorePath + 'offers/',
      imageBase: commonStorePath + '/categories/'
