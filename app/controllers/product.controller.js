@@ -237,12 +237,10 @@ exports.home = async (req, res) => {
         var offers = await OfferModel.find({staus:1});
         res.status(200).send({
             success: 1,
-            bannerImageBase: bannerConfig.imageBase,
-            categoriesImageBase: categoriesConfig.imageBase,
-            productImageBase: productsConfig.imageBase,
-            banners: banners,
-            categoryList: categoryList,
-            productList: productList
+            brands:brands,
+            trending:trending,
+            popular:popular,
+            offers:offers
         });;
     } catch (err) {
         res.status(500).send({
