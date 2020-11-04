@@ -1,6 +1,6 @@
 const Product = require('../models/product.model');
 const Category = require('../models/categories.model');
-const OfferModel =  require('../model/offers.model');
+const OfferModel =  require('../models/offers.model');
 const Reviews = require('../models/review.model');
 const Size = require('../models/size.model');
 const Color = require('../models/color.model');
