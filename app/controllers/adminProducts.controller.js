@@ -380,6 +380,23 @@ exports.update = async (req, res) => {
         update.name = params.name;
     }
 
+    if (params.trending){
+        if (params.trending === true){
+            update.isTrending = true
+        }
+        if (params.trending === false){
+            update.isTrending = false
+        }
+    }
+    if (params.popular){
+        if (params.popular === true){
+            update.isPopular = true
+        }
+        if (params.popular === false){
+            update.isPopular = false
+        }
+    }
+
 
     if (update == null) {
         return res.send({
@@ -459,8 +476,8 @@ exports.addVariant = async (req, res) => {
     let userDataz = req.identity.data;
     let userId = userDataz.id;
     let params = req.body;
-    if (!params.productId && !params.size || !params.stockAvailable || !params.costPrice || !params.sellingPrice
-        || !params.currency || !params.unit) {
+    var errors  = [];
+    if (!params.productId || !params.size || !params.stockAvailable || !params.costPrice || !params.sellingPrice || !params.color) {
         var message = "";
         if (!params.size) {
             errors.push({
@@ -490,19 +507,12 @@ exports.addVariant = async (req, res) => {
             });
             message = "Require sellingPrice";
         }
-        if (!params.currency) {
+        if (!params.color) {
             errors.push({
-                field: "currency",
-                message: "Require currency"
+                field: "color",
+                message: "Require color"
             });
-            message = "Require currency";
-        }
-        if (!params.unit) {
-            errors.push({
-                field: "unit",
-                message: "Require unit"
-            });
-            message = "Require unit";
+            message = "Require color";
         }
         if (!params.productId) {
             errors.push({
@@ -534,8 +544,9 @@ exports.addVariant = async (req, res) => {
     if (productData && productData.success && (productData.success === 0)) {
         return res.send(productData);
     }
+   // return res.send(productData);
     if (productData) {
-        if (productData.variantsExists) {
+        if (productData.variantExists == true) {
             var variantObj = {};
             variantObj.size = params.size;
             variantObj.parent = productId;
@@ -543,8 +554,7 @@ exports.addVariant = async (req, res) => {
             variantObj.costPrice = params.costPrice;
             variantObj.sellingPrice = params.sellingPrice;
             variantObj.isAvailable = true;
-            variantObj.currency = params.currency;
-            variantObj.unit = params.unit;
+            variantObj.color = params.color;
             variantObj.status = 1;
             variantObj.tsCreatedAt = Date.now();
             variantObj.tsModifiedAt = null;
@@ -561,10 +571,7 @@ exports.addVariant = async (req, res) => {
             if (variantData && variantData.success && (variantData.success === 0)) {
                 return res.send(variantData);
             }
-            console.log("findCriteria")
-            console.log(findCriteria)
-            console.log("findCriteria")
-            console.log(variantData.id)
+           
             var updateVariant = {
                 $push: {
                     variants: variantData.id
@@ -583,9 +590,7 @@ exports.addVariant = async (req, res) => {
             if (updateProduct && updateProduct.success && (updateProduct.success === 0)) {
                 return res.send(updateProduct);
             }
-            console.log("updateProduct")
-            console.log(updateProduct)
-            console.log("updateProduct")
+           
             return res.send({
                 message: "Variant added successfully",
                 success: 1,

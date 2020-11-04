@@ -22,7 +22,7 @@ module.exports = (app) => {
     app.patch('/adminProducts/update', auth, products.update);
     app.delete('/adminProducts/:id/delete', auth, products.delete);
 
-    app.post('/adminProducts/variant', auth, products.addVariant);
+    app.post('/adminproducts/addvariant', auth, products.addVariant);
     app.get('/adminProducts/variant/:id/detail', auth, products.getVariantDetail);
     app.patch('/adminProducts/variant/:id/update', auth, products.updateVariant);
     app.delete('/adminProducts/variant/:id/delete', auth, products.deleteVariant);

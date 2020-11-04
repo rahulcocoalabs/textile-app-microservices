@@ -30,15 +30,19 @@ const product = mongoose.Schema({
 	},
 	image: [String],
 	subImages: Array,
-
+	offerId: {
+		type: mongoose.Schema.Types.ObjectId,
+		ref: 'Offer'
+	},
 	costPrice: Number,
 	sellingPrice:Number,
-	variantsExists: Boolean,
-	
-	variant:{
+	variantExists: Boolean,
+	isTrending:Boolean,
+	isPopular:Boolean,
+	variants:[{
 		type: mongoose.Schema.Types.ObjectId,
 		ref: 'Variant'
-	},
+	}],
 	categories:[{
 		type: mongoose.Schema.Types.ObjectId,
 		ref: 'Category'

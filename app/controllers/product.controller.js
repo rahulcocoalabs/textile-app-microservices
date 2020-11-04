@@ -1,6 +1,9 @@
 const Product = require('../models/product.model');
 const Category = require('../models/categories.model');
+const OfferModel =  require('../model/offers.model');
 const Reviews = require('../models/review.model');
+const Size = require('../models/size.model');
+const Color = require('../models/color.model');
 const Brand = require('../models/brands.model');
 const Banner = require('../models/banner.model');
 const User = require('../models/user.model');
@@ -9,6 +12,8 @@ const config = require('../../config/app.config');
 const productConfig = config.products;
 const ObjectId = require('mongoose').Types.ObjectId;
 const Constants = require('../helpers/constants');
+const brandsModel = require('../models/brands.model');
+const productModel = require('../models/product.model');
 const bannerConfig = config.banners;
 const productsConfig = config.products;
 const categoriesConfig = config.categories;
@@ -35,14 +40,7 @@ exports.list = async (req, res) => {
             })
         }
     }
-    if (filterValue) {
-        if ((filterValue != Constants.veg) && (filterValue != Constants.nonVeg) && (filterValue != Constants.combo) && (filterValue != Constants.fastFood)) {
-            return res.status(400).send({
-                success: 0,
-                message: 'incorrect filter value'
-            })
-        }
-    }
+
     // sort
     let sort = {};
     if (sortValue == Constants.lowToHigh) {
@@ -56,7 +54,7 @@ exports.list = async (req, res) => {
     }
 
     // filter
-    let filter = {
+    var filter = {
         $or: [{
             name: {
                 $regex: search,
@@ -64,15 +62,26 @@ exports.list = async (req, res) => {
             }
         }]
     };
-    
+
+    if (params.brand) {
+        filter.brand = params.brand
+    }
+    if (params.category) {
+        filter.categories = {
+            $elemMatch: {
+                $eq: params.category
+            }
+        }
+    }
+
     let projection = {
         name: 1,
         image: 1,
         category: 1,
         sellingPrice: 1,
-        costPrice:1,
+        costPrice: 1,
         averageRating: 1,
-        brand:1
+        brand: 1
     };
     try {
         let products = await Product.find(filter, projection).populate({
@@ -143,22 +152,34 @@ exports.detail = async (req, res) => {
         _id: id,
         status: 1
     };
-    let projection = {
-        name: 1,
-        image: 1,
-        category: 1,
-        quantity: 1,
-        subImages: 1,
-        description: 1,
-        costPrice: 1,
-        sellingPrice: 1,
-        averageRating: 1
-    };
+    // let projection = {
+    //     name: 1,
+    //     image: 1,
+    //     category: 1,
+    //     quantity: 1,
+    //     subImages: 1,
+    //     description: 1,
+    //     costPrice: 1,
+    //     sellingPrice: 1,
+    //     averageRating: 1
+    // };
     try {
-        let productDetail = await Product.findById(filter, projection).populate({
+        let productDetail = await Product.findById(filter).populate([{
             path: 'variants',
-            select: 'size costPrice unit sellingPrice currency'
-        }).lean();
+            populate: {
+                path: 'size',
+                select: 'name'
+            }
+        },
+        {
+            path: 'variants',
+            populate: {
+                path: 'color',
+                select: 'name'
+            }
+        }]).lean();
+
+        return res.send(productDetail);
         let userData = await User.findById({
             _id: userId,
             status: 1
@@ -209,36 +230,11 @@ exports.home = async (req, res) => {
     let userDataz = req.identity.data;
     let userId = userDataz.id;
     try {
-        let bannerFilter = {
-            status: 1
-        };
-        let bannerProjection = {
-            image: 1
-        };
-        let banners = await Banner.find(bannerFilter, bannerProjection);
-        let categoryFilter = {
-            status: 1
-        };
-        let categoryProjection = {
-            name: 1,
-            image: 1
-        };
-        let categoryList = await Category.find(categoryFilter, categoryProjection).limit(5);
-        let productFilter = {
-            status: 1
-        };
-        let productProjection = {
-            name: 1,
-            image: 1,
-            category: 1,
-            sellingPrice: 1,
-            averageRating: 1
-        };
-        let products = await Product.find(productFilter, productProjection).populate({
-            path: 'category',
-            select: 'name'
-        }).limit(5).lean();
-        let productList = await favouriteOrNot(products, userId);
+       
+        var brands = await brandsModel.find({status:1});
+        var trending = await productModel.find({status:1,isTrending:true});
+        var popular = await productModel.find({status:1,isPopular:true});
+        var offers = await OfferModel.find({staus:1});
         res.status(200).send({
             success: 1,
             bannerImageBase: bannerConfig.imageBase,

@@ -10,8 +10,8 @@ module.exports = {
     expirySeconds: 2 * 60
   },
   user: {
-    // imageUploadPath: 'uploads',
-    imageUploadPath: commonImageStorePath + 'users/',
+     imageUploadPath: 'uploads',
+    //imageUploadPath: commonImageStorePath + 'users/',
     imageBase: commonStorePath + '/users/',
     resultsPerPage: 30
   },
@@ -22,22 +22,27 @@ module.exports = {
     resultsPerPage: 30
   },
   banners: {
-    // imageUploadPath: 'uploads',
+    //imageUploadPath: 'uploads',
     imageUploadPath: commonImageStorePath + 'banners/',
     imageBase: commonStorePath + '/banners/'
   },
   categories: {
-    // imageUploadPath: 'uploads',
+   //imageUploadPath: 'uploads',
     imageUploadPath: commonImageStorePath + 'categories/',
     imageBase: commonStorePath + '/categories/'
   },
+  offfers: {
+    //imageUploadPath: 'uploads',
+     imageUploadPath: commonImageStorePath + 'offers/',
+     imageBase: commonStorePath + '/categories/'
+   },
   brands: {
     //imageUploadPath: 'uploads',
    imageUploadPath: commonImageStorePath + 'categories/',
    imageBase: commonStorePath + '/brands/'
  },
   products: {
-    // imageUploadPath: 'uploads',
+     //imageUploadPath: 'uploads',
     imageUploadPath: commonImageStorePath + 'products/',
     imageBase: commonStorePath + '/products/',
     resultsPerPage: 30
