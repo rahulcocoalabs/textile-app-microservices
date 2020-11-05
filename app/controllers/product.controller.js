@@ -77,7 +77,7 @@ exports.list = async (req, res) => {
     if (params.size) {
         filter.sizes = {
             $elemMatch: {
-                $eq: params.size
+                'sizes':{"$in":params.size}
             }
         }
     }
@@ -85,7 +85,7 @@ exports.list = async (req, res) => {
     if (params.color) {
         filter.colors = {
             $elemMatch: {
-                $eq: params.color
+                'colors':{"$in":params.color}
             }
         }
     }
