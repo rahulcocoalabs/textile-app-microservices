@@ -74,10 +74,12 @@ exports.list = async (req, res) => {
         }
     }
 
+    //return res.send(params.size)
+
     if (params.size) {
         filter.sizes = {
             $elemMatch: {
-                'sizes':{"$in":params.size}
+                $in: params.size
             }
         }
     }
@@ -85,7 +87,7 @@ exports.list = async (req, res) => {
     if (params.color) {
         filter.colors = {
             $elemMatch: {
-                'colors':{"$in":params.color}
+                $in: params.color
             }
         }
     }
@@ -119,7 +121,7 @@ exports.list = async (req, res) => {
             select: 'name'
         }).populate([{ path: 'variants' }]).skip(offset).limit(perPage).sort(sort).lean();
         let itemsCount = await Product.countDocuments(filter);
-        let productList = await favouriteOrNot(products, userId);
+     let productList = await favouriteOrNot(products, userId);
         totalPages = itemsCount / perPage;
         totalPages = Math.ceil(totalPages);
         let hasNextPage = page < totalPages;
