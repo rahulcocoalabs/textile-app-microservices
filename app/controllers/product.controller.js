@@ -17,6 +17,7 @@ const productModel = require('../models/product.model');
 const bannerConfig = config.banners;
 const productsConfig = config.products;
 const categoriesConfig = config.categories;
+const offerImageBase = appsConfig.offers.imageBase;
 
 // *** Product listing with pagination ***
 exports.list = async (req, res) => {
@@ -269,6 +270,7 @@ exports.home = async (req, res) => {
         var offers = await OfferModel.find({status:1});
         res.status(200).send({
             success: 1,
+            offerImageBase,
             brands: brands,
             trending: trending,
             popular: popular,
