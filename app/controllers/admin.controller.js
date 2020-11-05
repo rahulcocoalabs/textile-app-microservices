@@ -477,7 +477,7 @@ exports.addOffer = async (req, res) => {
     var data = new OfferModel({
 
         status: 1,
-        offerImageBase,
+        
         image:file.filename,
         description: params.description,
         value: params.value,
@@ -510,6 +510,7 @@ exports.addOffer = async (req, res) => {
     return res.send({
         success: 1,
         message: "offer added to database",
+        offerImageBase,
         saveData
     })
 }
