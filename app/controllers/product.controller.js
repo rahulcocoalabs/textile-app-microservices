@@ -17,7 +17,7 @@ const productModel = require('../models/product.model');
 const bannerConfig = config.banners;
 const productsConfig = config.products;
 const categoriesConfig = config.categories;
-const offerImageBase = appsConfig.offers.imageBase;
+const offerImageBase = config.offers.imageBase;
 
 // *** Product listing with pagination ***
 exports.list = async (req, res) => {
