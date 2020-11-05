@@ -270,7 +270,7 @@ exports.home = async (req, res) => {
         var offers = await OfferModel.find({status:1});
         res.status(200).send({
             success: 1,
-            offerImageBase,
+            offerImageBase:offerImageBase,
             brands: brands,
             trending: trending,
             popular: popular,
