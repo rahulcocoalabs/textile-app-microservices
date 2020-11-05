@@ -47,6 +47,16 @@ const product = mongoose.Schema({
 		type: mongoose.Schema.Types.ObjectId,
 		ref: 'Category'
 	}],
+	colors:[{
+		type: mongoose.Schema.Types.ObjectId,
+		ref: 'Color'
+	}],
+	sizes:[{
+		type: mongoose.Schema.Types.ObjectId,
+		ref: 'Size'
+	}],
+	upperSellingPrice:Number,
+	lowerSellingPrice:Number,
 	discount: Number,
 	sku: String,
 	weight: Number,

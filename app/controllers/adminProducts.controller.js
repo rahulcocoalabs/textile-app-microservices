@@ -345,7 +345,7 @@ exports.update = async (req, res) => {
 
 
 
-    if (!params.id) {
+    if (!req.params) {
         return res.send({
             success: 0,
             msg: "id not provided"
@@ -360,8 +360,11 @@ exports.update = async (req, res) => {
     if (params.costPrice) {
         update.costPrice = params.costPrice;
     }
-    if (params.sellingPrice) {
-        update.sellingPrice = params.sellingPrice;
+    if (params.uppersellingPrice) {
+        update.upperSellingPrice = params.uppersellingPrice;
+    }
+    if (params.lowersellingPrice) {
+        update.lowerSellingPrice = params.lowersellingPrice;
     }
     if (params.description) {
         update.description = params.description;
@@ -381,23 +384,24 @@ exports.update = async (req, res) => {
     }
 
     if (params.trending){
-        if (params.trending === true){
+        if (params.trending == 1){
             update.isTrending = true
         }
-        if (params.trending === false){
+        if (params.trending == 0){
             update.isTrending = false
         }
+        
+    
     }
     if (params.popular){
-        if (params.popular === true){
+        if (params.popular == 1){
             update.isPopular = true
         }
-        if (params.popular === false){
+        if (params.popular == 0){
             update.isPopular = false
         }
     }
-
-
+   
     if (update == null) {
         return res.send({
             success: 0,
@@ -406,7 +410,7 @@ exports.update = async (req, res) => {
     }
 
     var updated = await ProductModel.updateOne({
-        _id: params.id
+        _id: req.params.id
     },
         update
     ).catch(err => {

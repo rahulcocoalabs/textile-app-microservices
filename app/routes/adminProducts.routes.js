@@ -19,7 +19,7 @@ module.exports = (app) => {
   
     app.post('/adminProducts/create', ImageUpload.fields([{name:'images'}]), products.create);
     app.get('/adminProducts/search', auth, products.search);
-    app.patch('/adminProducts/update', auth, products.update);
+    app.patch('/adminProducts/:id/update', auth, products.update);
     app.delete('/adminProducts/:id/delete', auth, products.delete);
 
     app.post('/adminproducts/addvariant', auth, products.addVariant);

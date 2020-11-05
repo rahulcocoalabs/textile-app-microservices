@@ -1,6 +1,6 @@
 const Product = require('../models/product.model');
 const Category = require('../models/categories.model');
-const OfferModel =  require('../models/offers.model');
+const OfferModel = require('../models/offers.model');
 const Reviews = require('../models/review.model');
 const Size = require('../models/size.model');
 const Color = require('../models/color.model');
@@ -74,6 +74,36 @@ exports.list = async (req, res) => {
         }
     }
 
+    if (params.size) {
+        filter.sizes = {
+            $elemMatch: {
+                $eq: params.size
+            }
+        }
+    }
+
+    if (params.color) {
+        filter.colors = {
+            $elemMatch: {
+                $eq: params.color
+            }
+        }
+    }
+
+    if (params.upperprice) {
+        findCriteria.upperSellingPrice = {
+
+            $lt: params.upperprice
+        }
+    }
+    if (params.lowerprice) {
+        findCriteria.lowerSellingPrice = {
+
+            $gt: params.lowerprice
+        }
+    }
+
+
     let projection = {
         name: 1,
         image: 1,
@@ -87,7 +117,7 @@ exports.list = async (req, res) => {
         let products = await Product.find(filter, projection).populate({
             path: 'brand',
             select: 'name'
-        }).skip(offset).limit(perPage).sort(sort).lean();
+        }).populate([{ path: 'variants' }]).skip(offset).limit(perPage).sort(sort).lean();
         let itemsCount = await Product.countDocuments(filter);
         let productList = await favouriteOrNot(products, userId);
         totalPages = itemsCount / perPage;
@@ -230,17 +260,17 @@ exports.home = async (req, res) => {
     let userDataz = req.identity.data;
     let userId = userDataz.id;
     try {
-       
-        var brands = await brandsModel.find({status:1});
-        var trending = await productModel.find({status:1,isTrending:true});
-        var popular = await productModel.find({status:1,isPopular:true});
-        var offers = await OfferModel.find({staus:1});
+
+        var brands = await brandsModel.find({ status: 1 });
+        var trending = await productModel.find({ status: 1, isTrending: true });
+        var popular = await productModel.find({ status: 1, isPopular: true });
+        var offers = await OfferModel.find({ status: 1 });
         res.status(200).send({
             success: 1,
-            brands:brands,
-            trending:trending,
-            popular:popular,
-            offers:offers
+            brands: brands,
+            trending: trending,
+            popular: popular,
+            offers: offers
         });;
     } catch (err) {
         res.status(500).send({
