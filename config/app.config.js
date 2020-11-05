@@ -10,8 +10,8 @@ module.exports = {
     expirySeconds: 2 * 60
   },
   user: {
-     imageUploadPath: 'uploads',
-    //imageUploadPath: commonImageStorePath + 'users/',
+     //imageUploadPath: 'uploads',
+    imageUploadPath: commonImageStorePath + 'users/',
     imageBase: commonStorePath + '/users/',
     resultsPerPage: 30
   },
@@ -34,7 +34,7 @@ module.exports = {
   offers: {
     //imageUploadPath: 'uploads',
      imageUploadPath: commonImageStorePath + 'offers/',
-     imageBase: commonStorePath + '/categories/'
+     imageBase: commonStorePath + '/offers/'
    },
   brands: {
     //imageUploadPath: 'uploads',
@@ -42,7 +42,7 @@ module.exports = {
    imageBase: commonStorePath + '/brands/'
  },
   products: {
-     //imageUploadPath: 'uploads',
+    // imageUploadPath: 'uploads',
     imageUploadPath: commonImageStorePath + 'products/',
     imageBase: commonStorePath + '/products/',
     resultsPerPage: 30
