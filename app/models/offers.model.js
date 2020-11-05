@@ -5,6 +5,7 @@ const offer = mongoose.Schema({
     description: String,
     offerId:String,
     value:Number,
+    image:String,
     productsAssigned:[
         {
              type: mongoose.Schema.Types.ObjectId, ref: 'Product'

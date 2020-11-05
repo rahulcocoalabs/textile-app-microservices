@@ -464,13 +464,20 @@ exports.addOffer = async (req, res) => {
 
     let params = req.body;
 
-
+    let file = req.file;
+    if (!file){
+        return res.send({
+            success:0,
+            message:"please add image for offer"
+        })
+    }
 
     //var offerId = Date.now().toString().slice(5);
 
     var data = new OfferModel({
 
         status: 1,
+        image:file.filename,
         description: params.description,
         value: params.value,
         tsCreatedAt: Date.now()
