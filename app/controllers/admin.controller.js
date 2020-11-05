@@ -7,7 +7,7 @@ var bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const appsConfig = require('../../config/app.config');
 const paramsConfig = require('../../config/params.config');
-
+const offerImageBase = appsConfig.offers.imageBase;
 const {
     hashSync
 } = require('bcryptjs');
@@ -477,6 +477,7 @@ exports.addOffer = async (req, res) => {
     var data = new OfferModel({
 
         status: 1,
+        offerImageBase,
         image:file.filename,
         description: params.description,
         value: params.value,
