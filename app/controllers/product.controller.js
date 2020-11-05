@@ -264,7 +264,7 @@ exports.home = async (req, res) => {
         var brands = await brandsModel.find({ status: 1 });
         var trending = await productModel.find({ status: 1, isTrending: true });
         var popular = await productModel.find({ status: 1, isPopular: true });
-        var offers = await OfferModel.find({ status: 1 });
+        var offers = await OfferModel.find();
         res.status(200).send({
             success: 1,
             brands: brands,
