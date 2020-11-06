@@ -272,8 +272,8 @@ exports.home = async (req, res) => {
     try {
 
         var categories = await categoriesModel.find({ status: 1 },{name:1,image:1});
-        var trending = await productModel.find({ status: 1, isTrending: true },{name:1,image:1}).populate({path:'brand',select:{name:1}});
-        var popular = await productModel.find({ status: 1, isPopular: true },{name:1,image:1}).populate({path:'brand',select:{name:1}});
+        var trending = await productModel.find({ status: 1, isTrending: true },{name:1,image:1,averageRating:1,mainImage:1}).populate({path:'brand',select:{name:1}});
+        var popular = await productModel.find({ status: 1, isPopular: true },{name:1,image:1,averageRating:1,mainImage:1}).populate({path:'brand',select:{name:1}});
         var offers = await OfferModel.find({status:1},{image:1});
         let popularList = await favouriteOrNot(popular, userId);
         let trendingList = await favouriteOrNot(trending, userId);
