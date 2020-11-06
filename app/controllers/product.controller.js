@@ -204,22 +204,18 @@ exports.detail = async (req, res) => {
     //     averageRating: 1
     // };
     try {
-        let productDetail = await Product.findById(filter).populate([{
-            path: 'variants',
-            populate: {
-                path: 'size',
-                select: 'name'
-            }
-        },
-        {
-            path: 'variants',
-            populate: {
-                path: 'color',
-                select: 'name'
-            }
-        }]).lean();
+        let productDetail = await Product.findById(filter).populate({
+            path: 'colors',
+           
+              
+                select:{value:1,name:1}
+            
+        }).populate({
+            path: 'sizes',
+           select:{value:1,name:1}
+        }).lean();
 
-        return res.send(productDetail);
+        
         let userData = await User.findById({
             _id: userId,
             status: 1
@@ -235,27 +231,27 @@ exports.detail = async (req, res) => {
             status: 1
         });
         productDetail['totalReviews'] = totalReviews;
-        let relatedProducts = await Product.find({
-            category: productDetail.category,
-            _id: {
-                $ne: productDetail._id
-            },
-            status: 1
-        }, {
-            name: 1,
-            sellingPrice: 1,
-            image: 1,
-            averageRating: 1
-        }).populate({
-            path: 'category',
-            select: 'name'
-        }).lean();
-        relatedProducts = await favouriteOrNot(relatedProducts, userId);
+        // let relatedProducts = await Product.find({
+        //     category: productDetail.category,
+        //     _id: {
+        //         $ne: productDetail._id
+        //     },
+        //     status: 1
+        // }, {
+        //     name: 1,
+        //     sellingPrice: 1,
+        //     image: 1,
+        //     averageRating: 1
+        // }).populate({
+        //     path: 'category',
+        //     select: 'name'
+        // }).lean();
+        //relatedProducts = await favouriteOrNot(relatedProducts, userId);
         res.status(200).send({
             success: 1,
             imageBase: productsConfig.imageBase,
             item: productDetail,
-            relatedProducts: relatedProducts
+            //relatedProducts: relatedProducts
         });
     } catch (err) {
         res.status(500).send({
