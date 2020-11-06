@@ -105,6 +105,7 @@ exports.create = async (req, res) => {
         const newProduct = new ProductModel({
             name: name,
             image: images,
+            mainImage : images[0],
             status: 1,
             category: category,
             brand:brand,
