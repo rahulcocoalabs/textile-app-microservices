@@ -205,10 +205,8 @@ exports.detail = async (req, res) => {
     // };
     try {
         let productDetail = await Product.findById(filter).populate({
-            path: 'colors',
-           
-              
-                select:{value:1,name:1}
+            path: 'colors',  
+            select:{value:1,name:1}
             
         }).populate({
             path: 'sizes',
