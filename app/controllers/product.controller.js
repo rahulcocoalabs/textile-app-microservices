@@ -156,12 +156,16 @@ async function favouriteOrNot(products, userId) {
         status: 1
     });
     let wishList = userData.wishlist;
+
     for (let i = 0; i < products.length; i++) {
+        console.log('reached')
+       
         if (wishList.includes(products[i]._id)) {
             products[i].isFavourite = true;
         } else {
             products[i].isFavourite = false;
         }
+        console.log(products[i])
     }
     return products
 }

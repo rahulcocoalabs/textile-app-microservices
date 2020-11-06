@@ -37,6 +37,7 @@ const product = mongoose.Schema({
 	costPrice: Number,
 	sellingPrice:Number,
 	variantExists: Boolean,
+	isFavourite:Boolean,
 	isTrending:Boolean,
 	isPopular:Boolean,
 	variants:[{
