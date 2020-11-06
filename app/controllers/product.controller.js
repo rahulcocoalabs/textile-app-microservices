@@ -208,10 +208,10 @@ exports.detail = async (req, res) => {
             path: 'colors.colorId',  
             select:{value:1,name:1}
             
-        }]).populate({
+        }]).populate([{
             path: 'sizes',
            select:{value:1,name:1}
-        }).lean();
+        }]).lean();
 
         
         let userData = await User.findById({
