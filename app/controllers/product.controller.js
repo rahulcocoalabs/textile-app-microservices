@@ -209,7 +209,7 @@ exports.detail = async (req, res) => {
             select:{value:1,name:1}
             
         }]).populate([{
-            path: 'sizes',
+            path: 'sizes.sizeId',
            select:{value:1,name:1}
         }]).lean();
 
