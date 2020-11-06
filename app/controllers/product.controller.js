@@ -19,7 +19,7 @@ const bannerConfig = config.banners;
 const productsConfig = config.products;
 const categoriesConfig = config.categories;
 const offerImageBase = config.offers.imageBase;
-const categoryImageBase = config.categories.imageBase;
+const categoriesImageBase = config.categories.imageBase;
 const productImageBase = config.products.imageBase;
 
 // *** Product listing with pagination ***
