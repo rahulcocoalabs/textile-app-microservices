@@ -387,7 +387,7 @@ exports.favouritesList = async (req, res) => {
             }).catch(err => {
                 return {
                     success: 0,
-                    message: err
+                    message: err.message
                 }
             });
 
