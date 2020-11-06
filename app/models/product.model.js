@@ -49,14 +49,14 @@ const product = mongoose.Schema({
 		type: mongoose.Schema.Types.ObjectId,
 		ref: 'Category'
 	}],
-	colors:[{
+	colors:[{colorId:{
 		type: mongoose.Schema.Types.ObjectId,
 		ref: 'Color'
-	}],
-	sizes:[{
+	}}],
+	sizes:[{sizeId:{
 		type: mongoose.Schema.Types.ObjectId,
 		ref: 'Size'
-	}],
+	}}],
 	upperSellingPrice:Number,
 	lowerSellingPrice:Number,
 	discount: Number,
