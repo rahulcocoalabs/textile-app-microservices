@@ -11,6 +11,7 @@ const offerImageBase = appsConfig.offers.imageBase;
 const {
     hashSync
 } = require('bcryptjs');
+const variantModel = require('../models/variant.model');
 
 exports.details = async (req, res) => {
     let userDataz = req.identity.data;
@@ -465,10 +466,10 @@ exports.addOffer = async (req, res) => {
     let params = req.body;
 
     let file = req.file;
-    if (!file){
+    if (!file) {
         return res.send({
-            success:0,
-            message:"please add image for offer"
+            success: 0,
+            message: "please add image for offer"
         })
     }
 
@@ -477,8 +478,8 @@ exports.addOffer = async (req, res) => {
     var data = new OfferModel({
 
         status: 1,
-        
-        image:file.filename,
+
+        image: file.filename,
         description: params.description,
         value: params.value,
         tsCreatedAt: Date.now()
@@ -773,27 +774,8 @@ async function updateProductForDiscount(products, res, id) {
             continue;
         }
 
-        var price = data.sellingPrice;
-        var cost = data.costPrice;
+        await updateVariants(id, offer.value){
 
-        price = cost * offer.value * (0.01);
-
-
-
-
-        var updatedata = await productModel.updateOne({ _id: product, status: 1 }, { sellingPrice: price }).catch(err => {
-            return res.send({
-                success: 0,
-                message: "item not found in product model",
-                err: err.message
-            })
-        })
-
-        if (!updatedata) {
-            continue;
-        }
-        if (updatedata.success === 0) {
-            continue;
         }
 
         var addProductArray = await addProductsToOffer(product, res, id)
@@ -802,6 +784,27 @@ async function updateProductForDiscount(products, res, id) {
 
     }
 
+
+}
+
+async function updateVariants(id, value) {
+
+    try {
+        var product = await productModel.findOne({ status: 1, _id: id }, { variants: 1 })
+        for (x in product.variants) {
+            let item = product.variants[x];
+            let itemId = item._id;
+            let cost = item.costPrice;
+            reducedPrice = cost * value * 0.01;
+
+            var updateData = await variantModel.updateOne({status:1,_id:itemId},{sellingPrice:reducedPrice});
+
+
+        }
+    }
+    catch (err) {
+        
+    }
 
 }
 

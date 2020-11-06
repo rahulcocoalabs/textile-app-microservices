@@ -14,6 +14,7 @@ const ObjectId = require('mongoose').Types.ObjectId;
 const Constants = require('../helpers/constants');
 const brandsModel = require('../models/brands.model');
 const productModel = require('../models/product.model');
+const categoriesModel = require('../models/categories.model');
 const bannerConfig = config.banners;
 const productsConfig = config.products;
 const categoriesConfig = config.categories;
@@ -264,14 +265,14 @@ exports.home = async (req, res) => {
     let userId = userDataz.id;
     try {
 
-        var brands = await brandsModel.find({ status: 1 });
+        var categories = await categoriesModel.find({ status: 1 });
         var trending = await productModel.find({ status: 1, isTrending: true });
         var popular = await productModel.find({ status: 1, isPopular: true });
         var offers = await OfferModel.find({status:1});
         res.status(200).send({
             success: 1,
             offerImageBase:offerImageBase,
-            brands: brands,
+            categories: categories,
             trending: trending,
             popular: popular,
             offers: offers
