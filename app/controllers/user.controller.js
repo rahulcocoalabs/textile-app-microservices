@@ -377,9 +377,12 @@ exports.favouritesList = async (req, res) => {
                 costPrice: 1,
                 category: 1,
                 name: 1,
-                image: 1
+                mainImage: 1
             }).populate({
                 path: 'category',
+                select: 'name'
+            }).populate({
+                path: 'brand',
                 select: 'name'
             }).catch(err => {
                 return {
