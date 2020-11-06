@@ -267,18 +267,20 @@ exports.home = async (req, res) => {
     let userId = userDataz.id;
     try {
 
-        var categories = await categoriesModel.find({ status: 1 });
-        var trending = await productModel.find({ status: 1, isTrending: true });
-        var popular = await productModel.find({ status: 1, isPopular: true });
-        var offers = await OfferModel.find({status:1});
+        var categories = await categoriesModel.find({ status: 1 },{name:1,image:1});
+        var trending = await productModel.find({ status: 1, isTrending: true },{name:1,image:1}).populate({path:'brand',select:{name:1}});
+        var popular = await productModel.find({ status: 1, isPopular: true },{name:1,image:1}).populate({path:'brand',select:{name:1}});
+        var offers = await OfferModel.find({status:1},{image:1});
+        let popularList = await favouriteOrNot(popular, userId);
+        let trendingList = await favouriteOrNot(trending, userId);
         res.status(200).send({
             success: 1,
             offerImageBase:offerImageBase,
             categoriesImageBase:categoriesImageBase,
             productImageBase:productImageBase,
             categories: categories,
-            trending: trending,
-            popular: popular,
+            trending: trendingList,
+            popular: popularList,
             offers: offers
         });;
     } catch (err) {
