@@ -272,6 +272,7 @@ exports.home = async (req, res) => {
         res.status(200).send({
             success: 1,
             offerImageBase:offerImageBase,
+            categoriesImageBase:categoriesImageBase,
             categories: categories,
             trending: trending,
             popular: popular,
