@@ -23,7 +23,7 @@ exports.create = async (req, res) => {
     var costPrice = req.body.costPrice;
     var category = req.body.category;
     var brand = req.body.brand;
-    if (!name || !files || !qty || !sellingPrice || !costPrice || !description || !category || !brand)  {
+    if (!name || !files || !qty || !sellingPrice || !costPrice || !description || !category || !brand) {
         var errors = [];
         if (!name) {
             errors.push({
@@ -78,9 +78,9 @@ exports.create = async (req, res) => {
     var files = req.files;
     var images = [];
     if (files) {
-        
+
         if (files.images && files.images.length > 0) {
-            
+
             var len = files.images.length;
             var i = 0;
             while (i < len) {
@@ -89,7 +89,7 @@ exports.create = async (req, res) => {
             }
         }
     }
-    
+
     name = name.trim();
     var checkProductName = await ProductModel.find({
         name: name,
@@ -105,10 +105,10 @@ exports.create = async (req, res) => {
         const newProduct = new ProductModel({
             name: name,
             image: images,
-            mainImage : images[0],
+            mainImage: images[0],
             status: 1,
             category: category,
-            brand:brand,
+            brand: brand,
             sellingPrice: params.sellingPrice,
             costPrice: params.costPrice,
             stockAvailable: params.qty,
@@ -384,25 +384,25 @@ exports.update = async (req, res) => {
         update.name = params.name;
     }
 
-    if (params.trending){
-        if (params.trending == 1){
+    if (params.trending) {
+        if (params.trending == 1) {
             update.isTrending = true
         }
-        if (params.trending == 0){
+        if (params.trending == 0) {
             update.isTrending = false
         }
-        
-    
+
+
     }
-    if (params.popular){
-        if (params.popular == 1){
+    if (params.popular) {
+        if (params.popular == 1) {
             update.isPopular = true
         }
-        if (params.popular == 0){
+        if (params.popular == 0) {
             update.isPopular = false
         }
     }
-   
+
     if (update == null) {
         return res.send({
             success: 0,
@@ -481,7 +481,7 @@ exports.addVariant = async (req, res) => {
     let userDataz = req.identity.data;
     let userId = userDataz.id;
     let params = req.body;
-    var errors  = [];
+    var errors = [];
     if (!params.productId || !params.size || !params.stockAvailable || !params.costPrice || !params.sellingPrice || !params.color) {
         var message = "";
         if (!params.size) {
@@ -546,10 +546,162 @@ exports.addVariant = async (req, res) => {
                 error: err
             }
         })
+    if (!productData) {
+        return res.send({
+            success: 0,
+            message: "product does not exist"
+        });
+    }
     if (productData && productData.success && (productData.success === 0)) {
         return res.send(productData);
     }
-   // return res.send(productData);
+
+    var sizedata = await SizeModel.findOne({ status: 1, _id: params.size })
+        .catch(err => {
+            return {
+                success: 0,
+                message: 'Something went wrong while checking product',
+                error: err
+            }
+        })
+    if (!sizedata) {
+        return res.send({
+            success: 0,
+            message: "size does not exist"
+        });
+    }
+    if (sizedata && sizedata.success && (sizedata.success === 0)) {
+        return res.send(productData);
+    }
+
+    var colordata = await ColorModel.findOne({ status: 1, _id: params.color })
+        .catch(err => {
+            return {
+                success: 0,
+                message: 'Something went wrong while checking product',
+                error: err
+            }
+        })
+    if (!colordata) {
+        return res.send({
+            success: 0,
+            message: "color does not exist"
+        });
+    }
+    if (colordata && colordata.success && (colordata.success === 0)) {
+        return res.send(colordata);
+    }
+
+    const product1 = colordata.productId;
+    if (productId != product1) {
+        return res.send({
+            success: 0,
+            message: "color is not proper or not meant for parent product"
+        })
+    }
+
+    const data = new VariantModel({
+
+        stockAvailable: params.stockAvailable,
+        color: params.color,
+        size: params.size,
+        productId: productId,
+        status: 1,
+        sellingPrice: params.sellingPrice,
+        costPrice: params.costPrice,
+        tsCreatedAt: Date.now(),
+        tsModifiedAt: null
+
+    })
+
+    const saveData = await data.save();
+
+    if (!saveData) {
+        return res.send({
+            success: 0,
+            message: "db error data not saved"
+        })
+    }
+    var update = {
+        
+        $push: {
+            variants: saveData.id,
+            colors: params.color,
+            sizes: params.size
+        },
+        tsModifiedAt: Date.now()
+    };
+
+   // return res.send(update)
+    const productInfo = await ProductModel.updateOne({ status: 1, _id: productId },update).catch(error => {
+        return {
+            success: 0,
+            message: error.message
+        }
+    })
+
+    if (!productInfo){
+        return res.send({
+            success:0,
+            message:"product did not updated"
+        })
+    }
+
+    if (productInfo && productInfo.success && (productInfo.success === 0)) {
+        return res.send(productInfo);
+    }
+
+    const productInfo1 = await ProductModel.findOne({ status: 1, _id: productId }).catch(error => {
+        return {
+            success: 0,
+            message: error.message
+        }
+    })
+
+    if (!productInfo1){
+        return res.send({
+            success:0,
+            message:"product did not updated"
+        })
+    }
+
+    if (productInfo1 && productInfo1.success && (productInfo1.success === 0)) {
+        return res.send(productInfo1);
+    }
+    var update1 = {}
+    if (productInfo1.upperSellingPrice < params.sellingPrice){
+        update1.upperSellingPrice = params.sellingPrice
+    }
+    if (productInfo1.lowerSellingPrice > params.lowerSellingPrice){
+        update1.lowerSellingPrice = params.sellingPrice
+    }
+
+    const productInfo2 = await ProductModel.updateOne({ status: 1, _id: productId },update1).catch(error => {
+        return {
+            success: 0,
+            message: error.message
+        }
+    })
+
+    if (!productInfo2){
+        return res.send({
+            success:0,
+            message:"product did not updated"
+        })
+    }
+
+    if (productInfo2 && productInfo2.success && (productInfo2.success === 0)) {
+        return res.send(productInfo);
+    }
+
+    return res.send({
+        success:0,
+        message:"variant added"
+    })
+
+
+
+    // return res.send(productData);
     if (productData) {
         if (productData.variantExists == true) {
             var variantObj = {};
@@ -576,13 +728,13 @@ exports.addVariant = async (req, res) => {
             if (variantData && variantData.success && (variantData.success === 0)) {
                 return res.send(variantData);
             }
-           
+
             var updateVariant = {
                 $push: {
                     variants: variantData.id
                 },
             }
-                updateVariant.tsModifiedAt = Date.now();
+            updateVariant.tsModifiedAt = Date.now();
 
             var updateProduct = await ProductModel.updateOne(findCriteria, updateVariant)
                 .catch(err => {
@@ -595,7 +747,7 @@ exports.addVariant = async (req, res) => {
             if (updateProduct && updateProduct.success && (updateProduct.success === 0)) {
                 return res.send(updateProduct);
             }
-           
+
             return res.send({
                 message: "Variant added successfully",
                 success: 1,
@@ -858,13 +1010,15 @@ exports.listVariants = async (req, res) => {
 
 
 exports.createColor = async (req, res) => {
-    
+
     var name = req.body.name;
     var value = req.body.value;
-    
-    if (!name ||  !value) {
+    var productId = req.body.product;
+    var file = req.file;
+    //return res.send(req.body);
+    if (!name || !value || !productId || !file) {
         var errors = [];
-        
+
         if (!name) {
             errors.push({
                 field: 'name',
@@ -877,13 +1031,27 @@ exports.createColor = async (req, res) => {
                 message: 'value cannot be empty'
             })
         }
-       
+        if (!file) {
+            errors.push({
+                field: 'image',
+                message: 'image cannot be empty'
+            })
+        }
+        if (!productId) {
+            errors.push({
+                field: 'product',
+                message: 'productId cannot be empty'
+            })
+        }
         return res.status(400).send({
             success: 0,
             message: errors
         })
     }
-    
+
+
+
+
     name = name.trim();
     var checkColorName = await ColorModel.find({
         name: name,
@@ -892,15 +1060,27 @@ exports.createColor = async (req, res) => {
     if (checkColorName.length > 0) {
         return res.status(400).send({
             success: 0,
-            message: 'Product name exists'
+            message: 'color name exists'
+        })
+    }
+    var checkProduct = await ProductModel.find({
+        _id: productId,
+        status: 1
+    });
+    if (checkProduct.length == 0) {
+        return res.status(400).send({
+            success: 0,
+            message: 'Product does not exists'
         })
     }
     try {
         const newColor = new ColorModel({
             name: name,
             value: value,
+            image: file.filename,
+            productId: productId,
             status: 1,
-            
+
             tsCreatedAt: Date.now(),
             tsModifiedAt: null
         });
@@ -908,7 +1088,7 @@ exports.createColor = async (req, res) => {
         res.status(200).send({
             success: 1,
             id: addColor._id,
-            message: 'Product added successfully'
+            message: 'Color added successfully'
         });
     } catch (err) {
         res.status(500).send({
@@ -920,13 +1100,13 @@ exports.createColor = async (req, res) => {
 
 
 exports.createSize = async (req, res) => {
-    
+
     var name = req.body.name;
     var value = req.body.value;
-    
-    if (!name ||  !value) {
+
+    if (!name || !value) {
         var errors = [];
-        
+
         if (!name) {
             errors.push({
                 field: 'name',
@@ -939,13 +1119,13 @@ exports.createSize = async (req, res) => {
                 message: 'value cannot be empty'
             })
         }
-       
+
         return res.status(400).send({
             success: 0,
             message: errors
         })
     }
-    
+
     name = name.trim();
     var checkSize = await SizeModel.find({
         name: name,
@@ -962,7 +1142,7 @@ exports.createSize = async (req, res) => {
             name: name,
             value: value,
             status: 1,
-            
+
             tsCreatedAt: Date.now(),
             tsModifiedAt: null
         });

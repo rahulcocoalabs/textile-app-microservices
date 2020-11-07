@@ -3,7 +3,7 @@ var config = require('../../config/app.config.js');
 var multer = require('multer');
 var mime = require('mime-types');
 var productsConfig = config.products;
-
+var colorsConfig = config.products;
 
 var storage = multer.diskStorage({
     destination: productsConfig.imageUploadPath,
@@ -11,8 +11,15 @@ var storage = multer.diskStorage({
         cb(null, file.fieldname + '-' + Date.now() + "." + mime.extension(file.mimetype))
     }
 });
+var storage1 = multer.diskStorage({
+    destination: colorsConfig.imageUploadPath,
+    filename: function (req, file, cb) {
+        cb(null, file.fieldname + '-' + Date.now() + "." + mime.extension(file.mimetype))
+    }
+});
 
 var ImageUpload = multer({ storage: storage });
+var ImageUpload1 = multer({ storage: storage1 });
 module.exports = (app) => {
     const products = require('../controllers/adminProducts.controller');
     
@@ -29,5 +36,5 @@ module.exports = (app) => {
     app.get('/adminProducts/:id/variant/list', auth, products.listVariants);
 
     app.post('/adminProducts/createsize', auth, products.createSize);
-    app.post('/adminProducts/createcolor', auth, products.createColor);
+    app.post('/adminProducts/createcolor', auth, ImageUpload.single('image'),products.createColor);
 }

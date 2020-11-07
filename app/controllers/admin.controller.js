@@ -774,9 +774,9 @@ async function updateProductForDiscount(products, res, id) {
             continue;
         }
 
-        await updateVariants(id, offer.value){
+       // await updateVariants(id, offer.value){
 
-        }
+       // }
 
         var addProductArray = await addProductsToOffer(product, res, id)
 

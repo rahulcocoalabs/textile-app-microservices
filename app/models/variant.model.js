@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 
 
 const variants = mongoose.Schema({
-  size: Number,
+  
   stockAvailable: Number,
   parent: {
     type: mongoose.Schema.Types.ObjectId,
