@@ -513,6 +513,12 @@ exports.create = async (req, res) => {
             message: "did not recieved mobile"
         });
     }
+    if (!params.file) {
+        return res.send({
+            success: 0,
+            message: "did not recieved image"
+        });
+    }
 
     let findCriteria = {};
 
@@ -565,7 +571,7 @@ exports.create = async (req, res) => {
             name: params.name,
             email: params.email,
             mobile: params.mobile,
-            image: "",
+            image: params.file.filename,
             passwordHash: passHash,
             isVerified: false,
             isBlocked: false,

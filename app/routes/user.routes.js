@@ -17,7 +17,7 @@ var userImageUpload = multer({ storage: storage });
 module.exports = (app) => { 
     const user = require('../controllers/user.controller');
 
-    app.post('/user/create',user.create);
+    app.post('/user/create', userImageUpload.single('image'), user.create);
     app.post('/user/login',user.login);
     app.post('/user/addfavourite',auth, user.addFavourite);
     app.patch('/user/update',auth, userImageUpload.single('image'),user.update);
