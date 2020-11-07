@@ -513,7 +513,7 @@ exports.create = async (req, res) => {
             message: "did not recieved mobile"
         });
     }
-    if (!params.file) {
+    if (!req.file) {
         return res.send({
             success: 0,
             message: "did not recieved image"
@@ -571,7 +571,7 @@ exports.create = async (req, res) => {
             name: params.name,
             email: params.email,
             mobile: params.mobile,
-            image: params.file.filename,
+            image: req.file.filename,
             passwordHash: passHash,
             isVerified: false,
             isBlocked: false,
