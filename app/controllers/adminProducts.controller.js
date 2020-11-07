@@ -624,7 +624,7 @@ exports.addVariant = async (req, res) => {
     }
     var update = {
         
-        $push: {
+        $addToSet: {
             variants: saveData.id,
             colors: params.color,
             sizes: params.size
