@@ -29,7 +29,7 @@ const product = mongoose.Schema({
 		ref: 'Brand'
 	},
 	mainImage:String,
-	subImage: [String],
+	subImages: [String],
 	//subImages: Array,
 	offerId: {
 		type: mongoose.Schema.Types.ObjectId,
