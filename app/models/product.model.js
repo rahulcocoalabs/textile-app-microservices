@@ -29,8 +29,8 @@ const product = mongoose.Schema({
 		ref: 'Brand'
 	},
 	mainImage:String,
-	image: [String],
-	subImages: Array,
+	subImage: [String],
+	//subImages: Array,
 	offerId: {
 		type: mongoose.Schema.Types.ObjectId,
 		ref: 'Offer'
@@ -71,7 +71,10 @@ const product = mongoose.Schema({
 	isShippable: Boolean,
 	stockAvailable: Number,
 	outOfStock: Boolean,
-	averageRating: Number,
+	averageRating: {
+		type : Number,
+   		 default : 0.0
+	},
 	isVegOnly: Boolean,
 	isCombo: Boolean,
 	status: Number,
