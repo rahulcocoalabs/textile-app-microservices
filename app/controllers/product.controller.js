@@ -68,11 +68,7 @@ exports.list = async (req, res) => {
     };
 
     if (params.brand) {
-        filter.brand = {
-            $elemMatch: {
-                $eq: params.brand
-            }
-        }
+        filter.brand = params.brand
     }
     if (params.category) {
         filter.categories = {
