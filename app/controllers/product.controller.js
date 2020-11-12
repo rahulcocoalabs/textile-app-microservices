@@ -101,13 +101,13 @@ exports.list = async (req, res) => {
     }
 
     if (params.upperprice) {
-        filter.upperSellingPrice = {
+        filter.lowerSellingPrice = {
 
             $lt: params.upperprice
         }
     }
     if (params.lowerprice) {
-        filter.lowerSellingPrice = {
+        filter.upperSellingPrice = {
 
             $gt: params.lowerprice
         }
