@@ -123,7 +123,7 @@ exports.list = async (req, res) => {
         let products = await Product.find(filter, projection).populate({
             path: 'brand',
             select: 'name'
-        }).populate([{ path: 'variants' }]).skip(offset).limit(perPage).sort(sort).lean();
+        }).skip(offset).limit(perPage).sort(sort).lean();
         let itemsCount = await Product.countDocuments(filter);
      let productList = await favouriteOrNot(products, userId);
         totalPages = itemsCount / perPage;
