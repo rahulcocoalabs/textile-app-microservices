@@ -70,7 +70,7 @@ exports.list = async (req, res) => {
     if (params.brand) {
         filter.brand = {
             $elemMatch: {
-                $eq: params.brand
+                $in: params.brand
             }
         }
     }
