@@ -87,7 +87,7 @@ exports.list = async (req, res) => {
     if (params.size) {
         filter.sizes = {
             $elemMatch: {
-                $eq: params.size
+                $in: params.size
             }
         }
     }
@@ -101,19 +101,19 @@ exports.list = async (req, res) => {
     }
 
     if (params.upperprice) {
-        findCriteria.upperSellingPrice = {
+        filter.upperSellingPrice = {
 
             $lt: params.upperprice
         }
     }
     if (params.lowerprice) {
-        findCriteria.lowerSellingPrice = {
+        filter.lowerSellingPrice = {
 
             $gt: params.lowerprice
         }
     }
 
-
+   // return res.send(filter)
     let projection = {
         name: 1,
         image: 1,
