@@ -1,6 +1,8 @@
 
 var config = require('../../config/app.config');
 const Carts = require('../models/cart.model');
+const Size = require('../models/size.model');
+const Color = require('../models/color.model');
 const constants = require('../helpers/constants');
 var pushNotificationHelper = require('../helpers/pushNotificationHelper')
 var paginationHelper = require('../helpers/paginationHelper')
@@ -56,7 +58,7 @@ exports.addToCart = async (req, res) => {
         });
     }
 
-    var productCheck = await productValidator.checkProduct(params);
+    var productCheck = await productValidator.checkProduct(params,res);
     if (productCheck.success === 0) {
         return res.send(productCheck);
     }
@@ -78,12 +80,41 @@ exports.addToCart = async (req, res) => {
         return res.send(pendingCartExists);
     }
     if (pendingCartExists) {
+
+        
+        if (pendingCartExists.products){
+            
+            if (pendingCartExists.products.length  == undefined){
+              
+                var newProd = {};
+                newProd.productId = productCheck.productObj._id;
+                newProd.quantity = params.count
+                newProd.price = productCheck.productObj.sellingPrice;
+                
+                newProd.isVariant = true;
+                newProd.variantId = productCheck.productObj.variantId;
+
+                let updateCrt = await Carts.updateOne(findCriteria,{$push:{products:newProd}}).catch(err=>{
+                    return res.send({
+                        success:0,
+                        message:"could not insert to db"
+                    })
+                })
+                return res.send({
+                    success:1,
+                    message:"add to cart"
+                })
+            }
+        }
+
+        //return res.send(pendingCartExists)
         var isProductAlreadyExists = false;
         var mainProducts = pendingCartExists.products;
         var condition = {}
         var quantity = productCheck.productObj.quantity;
         var totalPrice = 0;
         var arrayFilterObj = {};
+        
         if (!productCheck.productObj.isVariant) {
             let productIndex = await mainProducts.findIndex(product => (JSON.stringify(product.productId) === JSON.stringify(productCheck.productObj.productId) && (product.status === 1)))
             if (productIndex > -1) {
@@ -241,7 +272,15 @@ exports.showCart = async (req, res) => {
             select: { name: 1 ,stockAvailable : 1,image : 1}
         }, {
             path: 'products.variantId',
-            select: { size: 1, unit: 1,stockAvailable : 1 }
+            select: { size: 1, unit: 1,stockAvailable : 1 },
+            populate: [{
+                path:'size',
+                select:{name:1}
+            },
+            {
+                path:'color',
+                select:{name:1}
+            }]
         }
         ])
         .sort({
@@ -251,7 +290,7 @@ exports.showCart = async (req, res) => {
             return {
                 success: 0,
                 message: 'Something went wrong while getting cart',
-                error: err
+                error: err.message
             }
         })
 

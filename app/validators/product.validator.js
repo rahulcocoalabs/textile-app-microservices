@@ -3,7 +3,7 @@ var Variants = require('../models/variant.model');
 
 
 module.exports = {
-    checkProduct: async function (data) {
+    checkProduct: async function (data,res) {
       
         var productObj = {
             productId : data.productId,
@@ -11,7 +11,7 @@ module.exports = {
          }
         var productCheck = await Products.findOne({
             _id : data.productId,
-            isActive : true,
+           // isActive : true,
             status : 1
         })
         .catch(err => {
@@ -32,16 +32,19 @@ module.exports = {
                 message: 'Qunatity must be greater than 0'
             }
         }
+        
         if(data.isVariant){
-            productObj.isVariant = true;       
-            if(productCheck.variantsExists){
+            productObj.isVariant = true;  
+            
+          //  if(productCheck.variantsExists  == true){
+               
                 var variantId = data.variantId;
                 productObj.variantId = variantId;       
               
                 var findCriteria = {
                     _id : variantId,
                     parent : data.productId,
-                    isActive : true,
+                   // isActive : true,
                     status : 1
                 }
                 
@@ -89,12 +92,12 @@ module.exports = {
                 }
             }
 
-            }else{
-                return {
-                    success : 0,
-                    message : 'Variants not existed in this product'
-                }
-            }
+            // }else{
+            //     return {
+            //         success : 0,
+            //         message : 'Variants not existed in this product'
+            //     }
+            // }
 
         }else{
           
