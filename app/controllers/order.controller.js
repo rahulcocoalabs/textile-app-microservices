@@ -2,6 +2,8 @@ var CartModel = require('../models/cart.model');
 var CodeModel = require('../models/promocode.model');
 const productModel = require('../models/product.model');
 const variantModel = require('../models/variant.model');
+const color = require('../models/color.model');
+const size = require('../models/size.model');
 const AddressModel = require('../models/address.model');
 var config = require('../../config/app.config');
 var constants = require('../helpers/constants');
@@ -273,6 +275,7 @@ exports.getOrderDetail = async(req,res) =>{
     var projection = {
         status : 0,
         tsModifiedAt : 0,
+
         isConvertedToOrder : 0,
         
     }
@@ -283,7 +286,15 @@ exports.getOrderDetail = async(req,res) =>{
         select: { name: 1,image : 1}
     },{
         path: 'products.variantId',
-        select: { size: 1 , unit : 1}
+        select: { size: 1 , unit : 1},
+        populate: [{
+            path:'size',
+            select:{name:1}
+        },
+        {
+            path:'color',
+            select:{name:1}
+        }]
     },{
         path : 'deliveryAddress',
         select : {tSCreatedAt : 0, tSModifiedAt : 0, default : 0, status : 0, owner : 0}
