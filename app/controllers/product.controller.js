@@ -15,6 +15,7 @@ const Constants = require('../helpers/constants');
 const brandsModel = require('../models/brands.model');
 const productModel = require('../models/product.model');
 const categoriesModel = require('../models/categories.model');
+const colorModel = require('../models/color.model');
 const bannerConfig = config.banners;
 const productsConfig = config.products;
 const categoriesConfig = config.categories;
@@ -88,28 +89,34 @@ exports.list = async (req, res) => {
         }
     }
 
+    var colorfilter = {};
+    colorfilter.status = 1
+    colorfilter.name = params.color
+
+    var colorset = await colorModel.find(colorfilter,{_id:1});
+   
     if (params.color) {
         filter.colors = {
             $elemMatch: {
-                $in: params.color
+                $in: colorset
             }
         }
     }
 
     if (params.upperprice) {
-        findCriteria.upperSellingPrice = {
+        filter.lowerSellingPrice = {
 
             $lt: params.upperprice
         }
     }
     if (params.lowerprice) {
-        findCriteria.lowerSellingPrice = {
+        filter.upperSellingPrice = {
 
             $gt: params.lowerprice
         }
     }
 
-
+   // return res.send(filter)
     let projection = {
         name: 1,
         image: 1,
@@ -123,9 +130,9 @@ exports.list = async (req, res) => {
         let products = await Product.find(filter, projection).populate({
             path: 'brand',
             select: 'name'
-        }).populate([{ path: 'variants' }]).skip(offset).limit(perPage).sort(sort).lean();
+        }).skip(offset).limit(perPage).sort(sort).lean();
         let itemsCount = await Product.countDocuments(filter);
-     let productList = await favouriteOrNot(products, userId);
+        let productList = await favouriteOrNot(products, userId);
         totalPages = itemsCount / perPage;
         totalPages = Math.ceil(totalPages);
         let hasNextPage = page < totalPages;
@@ -159,7 +166,7 @@ async function favouriteOrNot(products, userId) {
 
     for (let i = 0; i < products.length; i++) {
         console.log('reached')
-       
+
         if (wishList.includes(products[i]._id)) {
             products[i].isFavourite = true;
         } else {
@@ -205,20 +212,19 @@ exports.detail = async (req, res) => {
     // };
     try {
         let productDetail = await Product.findById(filter).populate([{
-            path: 'colors',  
-            select:{value:1,name:1,image:1}
-            
+            path: 'colors',
+            select: { value: 1, name: 1, image: 1 }
         }]).populate([{
             path: 'sizes',
-           select:{value:1,name:1}
+            select: { value: 1, name: 1 }
         }]).populate([{
             path: 'variants'
         }]).populate({
             path: 'brand',
-           select:{name:1,image:1}
+            select: { name: 1, image: 1 }
         }).lean();
 
-        
+
         let userData = await User.findById({
             _id: userId,
             status: 1
@@ -270,17 +276,17 @@ exports.home = async (req, res) => {
     let userId = userDataz.id;
     try {
 
-        var categories = await categoriesModel.find({ status: 1 },{name:1,image:1});
-        var trending = await productModel.find({ status: 1, isTrending: true },{name:1,image:1,averageRating:1,mainImage:1,sellingPrice:1,costPrice:1}).populate({path:'brand',select:{name:1}});
-        var popular = await productModel.find({ status: 1, isPopular: true },{name:1,image:1,averageRating:1,mainImage:1,sellingPrice:1,costPrice:1}).populate({path:'brand',select:{name:1}});
-        var offers = await OfferModel.find({status:1},{image:1});
+        var categories = await categoriesModel.find({ status: 1 }, { name: 1, image: 1 });
+        var trending = await productModel.find({ status: 1, isTrending: true }, { name: 1, image: 1, averageRating: 1, mainImage: 1, sellingPrice: 1, costPrice: 1 }).populate({ path: 'brand', select: { name: 1 } });
+        var popular = await productModel.find({ status: 1, isPopular: true }, { name: 1, image: 1, averageRating: 1, mainImage: 1, sellingPrice: 1, costPrice: 1 }).populate({ path: 'brand', select: { name: 1 } });
+        var offers = await OfferModel.find({ status: 1 }, { image: 1 });
         let popularList = await favouriteOrNot(popular, userId);
         let trendingList = await favouriteOrNot(trending, userId);
         res.status(200).send({
             success: 1,
-            offerImageBase:offerImageBase,
-            categoriesImageBase:categoriesImageBase,
-            productImageBase:productImageBase,
+            offerImageBase: offerImageBase,
+            categoriesImageBase: categoriesImageBase,
+            productImageBase: productImageBase,
             categories: categories,
             trending: trendingList,
             popular: popularList,

@@ -19,6 +19,7 @@ module.exports = (app) => {
 
     app.post('/user/create', userImageUpload.single('image'), user.create);
     app.post('/user/login',user.login);
+    app.get('/user/getfilters',user.filtersList);
     app.post('/user/addfavourite',auth, user.addFavourite);
     app.patch('/user/update',auth, userImageUpload.single('image'),user.update);
     app.delete('/user/removefavourite',auth,user.removeFavourite);

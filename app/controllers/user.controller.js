@@ -1,5 +1,8 @@
 var stringify = require('json-stringify-safe');
 var UserModel = require('../models/user.model');
+var colorsModel = require('../models/color.model');
+var sizesModel = require('../models/size.model');
+var brandsModel = require('../models/brands.model');
 var CartModel = require('../models/cart.model');
 const Category = require('../models/categories.model');
 var PushNotification = require('../models/pushNotification.model');
@@ -22,47 +25,55 @@ var ObjectId = require('mongoose').Types.ObjectId;
 exports.filtersList = async (req, res) => {
     var params = req.body;
 
-    res.send({
-        success: 1,
-        message: "filters listed",
-        "Brands": {
-            name: "brands",
-            values: [{
-                    name: "ashirvad"
+    try {
+        var colors = await colorsModel.find({ status: 1 }, { name: 1 });
+        var sizes = await sizesModel.find({ status: 1 }, { name: 1 });
+        var brands = await brandsModel.find({ status: 1 }, { name: 1 });
+
+        res.send({
+            success: 1,
+            colors: [
+
+                { "name": "black" },
+                { "name": "brown" },
+                { "name": "blue" },
+                { "name": "light blue" },
+                { "name": "light brown" },
+                { "name": "light black" },
+            ],
+            sizes,
+            brands,
+
+            "priceRange": {
+                "minimum": 1,
+                "maximum": 10000
+
+            },
+            message: "filters and sorting listed",
+            sorts: [
+                {
+                    name: "price low to high",
+                    key: "priceLowToHigh"
                 },
                 {
-                    name: "Brahmins"
+                    name: "price high to low",
+                    key: "priceHighToLow"
                 },
                 {
-                    name: "Amul"
+                    name: "highest rated",
+                    key: "highestRated"
                 }
             ]
-        },
-        "Pricerange": {
-            priceRange: {
-                minimum: 1,
-                maximum: 10000
-            }
-        },
+        })
 
-        message: "filters and sorting listed",
-        sorts: [
 
-            {
-                name: "price low to high",
-                key: "priceLowToHigh"
-
-            },
-            {
-                name: "price high to low",
-                key: "priceHighToLow"
-            },
-            {
-                name: "highest rated",
-                key: "highestRated"
-            }
-        ]
-    })
+    }
+    catch (error) {
+        return res.send({
+            success: 0,
+            message: error.message
+        })
+    }
 
 }
 
@@ -808,16 +819,16 @@ exports.update = async (req, res) => {
 
 
     let Data = await UserModel.findOneAndUpdate(findCriteria, update, {
-            useFindAndModify: false,
-            fields: {
-                id: 1,
-                email: 1,
-                mobile: 1,
-                name: 1,
-                image: 1
-            },
-            new: true
-        })
+        useFindAndModify: false,
+        fields: {
+            id: 1,
+            email: 1,
+            mobile: 1,
+            name: 1,
+            image: 1
+        },
+        new: true
+    })
         .catch(err => {
             return {
                 success: 0,
