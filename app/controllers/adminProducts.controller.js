@@ -1053,16 +1053,7 @@ exports.createColor = async (req, res) => {
 
 
     name = name.trim();
-    var checkColorName = await ColorModel.find({
-        name: name,
-        status: 1
-    });
-    if (checkColorName.length > 0) {
-        return res.status(400).send({
-            success: 0,
-            message: 'color name exists'
-        })
-    }
+    
     var checkProduct = await ProductModel.find({
         _id: productId,
         status: 1
