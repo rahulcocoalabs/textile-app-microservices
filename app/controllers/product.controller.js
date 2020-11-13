@@ -15,6 +15,7 @@ const Constants = require('../helpers/constants');
 const brandsModel = require('../models/brands.model');
 const productModel = require('../models/product.model');
 const categoriesModel = require('../models/categories.model');
+const colorModel = require('../models/color.model');
 const bannerConfig = config.banners;
 const productsConfig = config.products;
 const categoriesConfig = config.categories;
@@ -88,10 +89,16 @@ exports.list = async (req, res) => {
         }
     }
 
+    var colorfilter = {};
+    colorfilter.status = 1
+    colorfilter.name = params.color
+
+    var colorset = await colorModel.find(colorfilter,{_id:1});
+   
     if (params.color) {
         filter.colors = {
             $elemMatch: {
-                $in: params.color
+                $in: colorset
             }
         }
     }
