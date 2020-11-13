@@ -54,11 +54,11 @@ exports.filtersList = async (req, res) => {
             sorts: [
                 {
                     name: "price low to high",
-                    key: "priceLowToHigh"
+                    key: "lowToHigh"
                 },
                 {
                     name: "price high to low",
-                    key: "priceHighToLow"
+                    key: "highToLow"
                 },
                 {
                     name: "highest rated",
