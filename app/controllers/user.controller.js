@@ -32,22 +32,22 @@ exports.filtersList = async (req, res) => {
 
         res.send({
             success: 1,
-            colors:[
-              
-                {"name": "black"},
-                {"name": "brown"},
-                {"name": "blue"},
-                {"name": "light blue"},
-                {"name": "light brown"},
-                {"name": "light black"},
+            colors: [
+
+                { "name": "black" },
+                { "name": "brown" },
+                { "name": "blue" },
+                { "name": "light blue" },
+                { "name": "light brown" },
+                { "name": "light black" },
             ],
             sizes,
             brands,
-            "Pricerange": {
-                "priceRange": {
-                    "minimum": 1,
-                    "maximum": 10000
-                }
+
+            "priceRange": {
+                "minimum": 1,
+                "maximum": 10000
+
             },
             message: "filters and sorting listed",
             sorts: [
@@ -70,8 +70,8 @@ exports.filtersList = async (req, res) => {
     }
     catch (error) {
         return res.send({
-            success:0,
-            message:error.message
+            success: 0,
+            message: error.message
         })
     }
 
