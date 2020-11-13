@@ -118,8 +118,9 @@ exports.list = async (req, res) => {
 
    // return res.send(filter)
     let projection = {
+
         name: 1,
-        image: 1,
+        mainImage: 1,
         category: 1,
         sellingPrice: 1,
         costPrice: 1,
