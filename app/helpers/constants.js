@@ -3,7 +3,7 @@ module.exports = Object.freeze({
   popular: 'popular',
   lowToHigh: 'lowToHigh',
   highToLow: 'highToLow',
-  rating: 'rating',
+  rating: 'highestRated',
 
   // Filter values
   veg: 'veg',
