@@ -13,6 +13,7 @@ const jwt = require('jsonwebtoken');
 const paramsConfig = require('../../config/app.config');
 var otpConfig = paramsConfig.otp;
 var usersConfig = paramsConfig.user;
+var productConfig = paramsConfig.products;
 const params_Config = require('../../config/params.config');
 const JWT_KEY = params_Config.development.jwt.secret;
 const pushNotificationHelper = require('../helpers/pushNotificationHelper');
@@ -424,7 +425,7 @@ exports.favouritesList = async (req, res) => {
         };
         res.status(200).send({
             success: 1,
-            imageBase: usersConfig.imageBase,
+            imageBase: productConfig.imageBase,
             pagination: pagination,
             items: wishlistinfo
         });
