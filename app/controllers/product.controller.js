@@ -317,5 +317,5 @@ async function makejsonArr(str){
 
     var result = str.substring(1, str.length-1);
     let elements = result.split(",");
-    return elements
+    return {elements,result}
 }
