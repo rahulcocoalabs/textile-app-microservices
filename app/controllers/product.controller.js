@@ -81,11 +81,11 @@ exports.list = async (req, res) => {
 
     //return res.send(params.size)
 
-    
+
 
     if (params.size) {
         let sizes = makejsonArr(params.size);
-       
+
 
         filter.sizes = {
             $elemMatch: {
@@ -93,19 +93,21 @@ exports.list = async (req, res) => {
             }
         }
     }
-    var colors  = [];
-     for (x in params.color){
-         let clr = params.color[x]
 
-         var colorfilter = {};
-         colorfilter.status = 1
-         colorfilter.name = clr
-     
-         var colorset = await colorModel.find(colorfilter,{_id:1});
-         colors.push(colorset._id);
-     }
-   
+
     if (params.color) {
+        var clrArr = makejsonArr(params.color);
+        var colors = [];
+        for (x in clrArr) {
+            let clr = clrArr[x]
+
+            var colorfilter = {};
+            colorfilter.status = 1
+            colorfilter.name = clr
+
+            var colorset = await colorModel.find(colorfilter, { _id: 1 });
+            colors.push(colorset._id);
+        }
         filter.colors = {
             $elemMatch: {
                 $in: colors
@@ -126,15 +128,15 @@ exports.list = async (req, res) => {
         }
     }
 
-    if (params.test){
-        if (params.test == 1){
+    if (params.test) {
+        if (params.test == 1) {
             return res.send({
-                filters:filter
+                filters: filter
             })
         }
     }
 
-   // return res.send(filter)
+    // return res.send(filter)
     let projection = {
 
         name: 1,
@@ -286,7 +288,8 @@ exports.detail = async (req, res) => {
             success: 0,
             message: err.message
         })
-        )}
+        )
+    }
 }
 
 // *** Home summary api ***
@@ -319,15 +322,15 @@ exports.home = async (req, res) => {
     }
 }
 
- function makejsonArr(str){
+function makejsonArr(str) {
     console.log(str)
-    var result = str.substring(1, str.length-1);
-   
+    var result = str.substring(1, str.length - 1);
+
     console.log(result)
     let elements = result.split(",");
     console.log(elements);
-    var arr  = [];
-    for (x in elements){
+    var arr = [];
+    for (x in elements) {
         arr.push(ObjectId(elements[x]))
     }
 
