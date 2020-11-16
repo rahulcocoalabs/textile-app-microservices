@@ -104,7 +104,9 @@ exports.list = async (req, res) => {
             var colorfilter = {};
             colorfilter.status = 1
             colorfilter.name = clr
-
+                return res.send({
+                    colorfilter
+                })
             var colorset = await colorModel.find(colorfilter, { _id: 1 });
             colors.push(colorset._id);
         }
