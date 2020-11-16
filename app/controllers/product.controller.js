@@ -85,7 +85,7 @@ exports.list = async (req, res) => {
        
         filter.sizes = {
             $elemMatch: {
-                $in: params.size
+                $in: JSON.parse(params.size)
             }
         }
     }
