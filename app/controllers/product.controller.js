@@ -96,7 +96,7 @@ exports.list = async (req, res) => {
 
 
     if (params.color) {
-        var clrArr = makejsonArr(params.color);
+        var clrArr = makejsonArrClr(params.color);
         var colors = [];
         for (x in clrArr) {
             let clr = clrArr[x]
@@ -332,6 +332,20 @@ function makejsonArr(str) {
     var arr = [];
     for (x in elements) {
         arr.push(ObjectId(elements[x]))
+    }
+
+    return arr;
+}
+function makejsonArrClr(str) {
+    console.log(str)
+    var result = str.substring(1, str.length - 1);
+
+    console.log(result)
+    let elements = result.split(",");
+    console.log(elements);
+    var arr = [];
+    for (x in elements) {
+        arr.push(elements[x])
     }
 
     return arr;
