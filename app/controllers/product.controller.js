@@ -313,12 +313,17 @@ exports.home = async (req, res) => {
     }
 }
 
-async function makejsonArr(str){
+ function makejsonArr(str){
     console.log(str)
     var result = str.substring(1, str.length-1);
    
     console.log(result)
     let elements = result.split(",");
     console.log(elements);
-    return {elements,result}
+    var arr  = [];
+    for (x in elements){
+        arr.push(ObjectId(elements[x]))
+    }
+
+    return arr;
 }
