@@ -82,13 +82,10 @@ exports.list = async (req, res) => {
     //return res.send(params.size)
 
     if (params.size) {
-        var sizes = [];
-        for (x in params.size){
-            sizes.push(params.size[x])
-        }
+       
         filter.sizes = {
             $elemMatch: {
-                $in: sizes
+                $in: params.size
             }
         }
     }
