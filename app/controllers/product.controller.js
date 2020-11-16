@@ -81,11 +81,13 @@ exports.list = async (req, res) => {
 
     //return res.send(params.size)
 
+    
+
     if (params.size) {
-       
+        let sizes = params.size.split(",");
         filter.sizes = {
             $elemMatch: {
-                $in: JSON.parse(params.size)
+                $in: sizes
             }
         }
     }
