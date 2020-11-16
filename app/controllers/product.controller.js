@@ -84,7 +84,7 @@ exports.list = async (req, res) => {
     
 
     if (params.size) {
-        let sizes = this.makejsonArr(params.size);
+        let sizes = makejsonArr(params.size);
         filter.sizes = {
             $elemMatch: {
                 $in: sizes
