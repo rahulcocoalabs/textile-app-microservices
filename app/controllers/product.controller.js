@@ -86,7 +86,7 @@ exports.list = async (req, res) => {
 
 
     if (params.size) {
-        let sizes = makejsonArr(params.size);
+        let sizes = makejsonArrClr(params.size);
 
 
         filter.sizes = {
