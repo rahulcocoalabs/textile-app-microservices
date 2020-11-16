@@ -86,24 +86,29 @@ exports.list = async (req, res) => {
     if (params.size) {
         let sizes = makejsonArr(params.size);
        
-        
+
         filter.sizes = {
             $elemMatch: {
                 $in: sizes
             }
         }
     }
+    var colors  = [];
+     for (x in params.color){
+         let clr = params.color[x]
 
-    var colorfilter = {};
-    colorfilter.status = 1
-    colorfilter.name = params.color
-
-    var colorset = await colorModel.find(colorfilter,{_id:1});
+         var colorfilter = {};
+         colorfilter.status = 1
+         colorfilter.name = clr
+     
+         var colorset = await colorModel.find(colorfilter,{_id:1});
+         colors.push(colorset._id);
+     }
    
     if (params.color) {
         filter.colors = {
             $elemMatch: {
-                $in: colorset
+                $in: colors
             }
         }
     }
