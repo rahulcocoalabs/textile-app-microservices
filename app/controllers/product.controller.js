@@ -84,7 +84,7 @@ exports.list = async (req, res) => {
     
 
     if (params.size) {
-        let sizes = params.size.split(",");
+        let sizes = this.makejsonArr(params.size);
         filter.sizes = {
             $elemMatch: {
                 $in: sizes
@@ -310,4 +310,11 @@ exports.home = async (req, res) => {
             message: err.message
         })
     }
+}
+
+async function makejsonArr(str){
+
+    var result = str.substring(1, str.length-1);
+    let elements = result.split(",");
+    return elements
 }
