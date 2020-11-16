@@ -69,7 +69,8 @@ exports.list = async (req, res) => {
     }
 
     if (params.brand) {
-        filter.brand = params.brand
+        var brandset = makejsonArrClr(params.brand)
+        filter.brand = brandset
     }
     if (params.category) {
         filter.categories = {
