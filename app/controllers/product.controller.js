@@ -76,7 +76,7 @@ exports.list = async (req, res) => {
         var categorySet = makejsonArrClr(params.category)
         filter.categories = {
             $elemMatch: {
-                $eq: categorySet
+                $in: categorySet
             }
         }
     }
