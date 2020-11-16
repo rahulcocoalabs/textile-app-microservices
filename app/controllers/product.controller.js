@@ -116,9 +116,13 @@ exports.list = async (req, res) => {
         }
     }
 
-    return res.send({
-        filter:filter
-    })
+    if (params.test){
+        if (params.test == 1){
+            return res.send({
+                filters:filter
+            })
+        }
+    }
 
    // return res.send(filter)
     let projection = {
