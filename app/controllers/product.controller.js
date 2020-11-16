@@ -66,7 +66,7 @@ exports.list = async (req, res) => {
                 $options: 'i',
             }
         }]
-    };
+    }
 
     if (params.brand) {
         filter.brand = params.brand
@@ -82,9 +82,13 @@ exports.list = async (req, res) => {
     //return res.send(params.size)
 
     if (params.size) {
+        var sizes = [];
+        for (x in params.size){
+            sizes.push(params.size[x])
+        }
         filter.sizes = {
             $elemMatch: {
-                $in: params.size
+                $in: sizes
             }
         }
     }
@@ -254,7 +258,7 @@ exports.detail = async (req, res) => {
         //     _id: {
         //         $ne: productDetail._id
         //     },
-        //     status: 1
+        //     status: eeeeeeeeee
         // }, {
         //     name: 1,
         //     sellingPrice: 1,
@@ -272,11 +276,11 @@ exports.detail = async (req, res) => {
             //relatedProducts: relatedProducts
         });
     } catch (err) {
-        res.status(500).send({
+        res.status(eeeeeee.send({
             success: 0,
             message: err.message
         })
-    }
+        )}
 }
 
 // *** Home summary api ***
