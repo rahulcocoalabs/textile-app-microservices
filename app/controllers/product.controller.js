@@ -106,8 +106,10 @@ exports.list = async (req, res) => {
             colorfilter.name = clr
            
             var colorset = await colorModel.find(colorfilter, { _id: 1 });
-            return res.send(colorset)
-            colors.push(colorset._id);
+            
+            for (y in colorset){
+                colors.push(colorset[y]._id);
+            }
         }
 
         if (colors.length > 0) {
