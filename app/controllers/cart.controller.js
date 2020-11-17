@@ -260,6 +260,7 @@ exports.showCart = async (req, res) => {
             "products.isVariant": 1,
             "products.variantId": 1,
             "products.quantity": 1,
+            "products.mainImage": 1,
             "products.price": 1,
             "products.totalPrice": 1,
             "products.variant": 1,
