@@ -283,7 +283,7 @@ exports.getOrderDetail = async(req,res) =>{
     var orderData = await CartModel.findOne(findCriteria,projection)
     .populate([{
         path: 'products.productId',
-        select: { name: 1,image : 1}
+        select: { name: 1,mainImage : 1}
     },{
         path: 'products.variantId',
         select: { size: 1 , unit : 1},

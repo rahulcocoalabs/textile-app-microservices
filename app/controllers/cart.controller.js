@@ -261,11 +261,11 @@ exports.showCart = async (req, res) => {
             "products.variantId": 1,
             "products.quantity": 1,
             
-            "products.price": 1,
-            "products.totalPrice": 1,
-            "products.variant": 1,
-            "products.status": 1,
-            "products.tsCreatedAt": 1,
+            // "products.price": 1,
+            // "products.totalPrice": 1,
+            // "products.variant": 1,
+            // "products.status": 1,
+            // "products.tsCreatedAt": 1,
         }
     )
         .populate([{
