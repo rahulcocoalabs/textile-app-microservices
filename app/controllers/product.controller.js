@@ -293,7 +293,7 @@ exports.detail = async (req, res) => {
             //relatedProducts: relatedProducts
         });
     } catch (err) {
-        res.status(eeeeeee.send({
+        res.status(500).send({
             success: 0,
             message: err.message
         })
