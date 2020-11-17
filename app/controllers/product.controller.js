@@ -241,7 +241,7 @@ exports.detail = async (req, res) => {
     //     averageRating: 1
     // };
     try {
-        let productDetail = await Product.findById(filter).populate([{
+        let productDetail = await Product.findOne(filter).populate([{
             path: 'colors',
             select: { value: 1, name: 1, image: 1 }
         }]).populate([{
