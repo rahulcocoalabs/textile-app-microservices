@@ -242,9 +242,6 @@ exports.detail = async (req, res) => {
     // };
     try {
         let productDetail = await Product.findOne(filter).populate([{
-            path: 'colors'
-            
-        }]).populate([{
             path: 'sizes',
             select: { value: 1, name: 1 }
         }]).populate([{
