@@ -297,7 +297,7 @@ exports.detail = async (req, res) => {
             success: 0,
             message: err.message
         })
-        )
+        
     }
 }
 
