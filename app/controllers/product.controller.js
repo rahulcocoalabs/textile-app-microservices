@@ -73,10 +73,10 @@ exports.list = async (req, res) => {
         filter.brand = brandset
     }
     if (params.category) {
-        var categorySet = makejsonArrClr(params.category)
+       // var categorySet = makejsonArrClr(params.category)
         filter.categories = {
             $elemMatch: {
-                $in: categorySet
+                $in: params.category
             }
         }
     }
