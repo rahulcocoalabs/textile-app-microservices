@@ -168,15 +168,15 @@ exports.addToCart = async (req, res) => {
         } else {
             var updateCart = await Carts.updateOne({
                 "_id": pendingCartExists.id,
-                "products": {
-                    "$elemMatch": condition
-                },
+                // "products": {
+                //     "$elemMatch": condition
+                // },
                 status: 1
 
             }, {
                 "$set": {
-                    "products.$[outer].quantity": quantity,
-                    "products.$[outer].totalPrice": totalPrice,
+                    "products.quantity": quantity,
+                    "products.totalPrice": totalPrice,
                 }
             }, {
                 "arrayFilters": [arrayFilterObj]
