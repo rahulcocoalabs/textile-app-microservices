@@ -14,7 +14,7 @@ var cartConfig = config.cart;
 var productsConfig = config.products;
 
 
-exports.addToCart = async(req,res) => {
+exports.addToCart2 = async(req,res) => {
 
     var params = req.body;
     let userDataz = req.identity.data;
@@ -66,7 +66,7 @@ exports.addToCart = async(req,res) => {
     findCriteria.isConvertedToOrder = false;
     findCriteria.userId = userId;
     findCriteria.status = 1;
-    
+
     var pendingCartExists = await Carts.findOne(findCriteria)
         .catch(err => {
             return {
@@ -99,7 +99,7 @@ exports.addToCart = async(req,res) => {
     // add quantity and price 
 }
 
-exports.addToCart1 = async (req, res) => {
+exports.addToCart = async (req, res) => {
     var params = req.body;
     let userDataz = req.identity.data;
     let userId = userDataz.id;
@@ -357,7 +357,7 @@ exports.showCart = async (req, res) => {
             "products.quantity": 1,
             
             // "products.price": 1,
-            // "products.totalPrice": 1,
+             "products.totalPrice": 1,
             // "products.variant": 1,
             // "products.status": 1,
             // "products.tsCreatedAt": 1,
@@ -401,7 +401,7 @@ exports.showCart = async (req, res) => {
     var cartId;
     if (cartData && cartData.products && cartData.products.length > 0) {
         products = cartData.products;
-       
+        return res.send(products);
         //products = products.filter(x => x.status == 1);
       //  return res.send(products)
         products = JSON.parse(JSON.stringify(products))
