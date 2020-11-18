@@ -133,10 +133,7 @@ exports.checkout = async (req, res) => {
                 update.orderStatus = "Pending"//constants.PENDING_ORDER;
                 update.tsModifiedAt = Date.now();
 
-                return res.send({
-                    item:update
-                })
-
+               
                 var updateCart = await CartModel.updateOne(findCriteria, update)
                     .catch(err => {
                         return {
