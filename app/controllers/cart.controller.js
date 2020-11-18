@@ -305,7 +305,9 @@ exports.showCart = async (req, res) => {
     var cartId;
     if (cartData && cartData.products && cartData.products.length > 0) {
         products = cartData.products;
-        products = products.filter(x => x.status == 1);
+       
+        //products = products.filter(x => x.status == 1);
+      //  return res.send(products)
         products = JSON.parse(JSON.stringify(products))
         products = await stockHelper.setIsOutOfStock(products);
         total = await getTotal(products);
