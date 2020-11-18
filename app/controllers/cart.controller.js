@@ -299,6 +299,7 @@ exports.showCart = async (req, res) => {
         return res.send(cartData);
     }
 
+    return res.send(cartData)
     // cartData = JSON.parse(JSON.stringify(cartData));
     var products = [];
     var total = 0;
@@ -525,15 +526,12 @@ exports.deleteCartItem = async (req, res) => {
             }
         }
         var objDelete =  { $pull: { 'products': { productId: params.productId ,variantId:params.variantId} } }
-        return res.send(objDelete);
-
+        
         var deleteProductInCart = await Carts.updateOne({
             "_id": cartData.id,
             status: 1
 
-        }, 
-           objDelete
-            )
+        }, objDelete )
             .catch(err => {
                 return {
                     success: 0,
@@ -550,7 +548,7 @@ exports.deleteCartItem = async (req, res) => {
             success: 1
         })
 
-        var deleteProductInCart = await Carts.updateOne({
+       /* var deleteProductInCart = await Carts.updateOne({
             "_id": cartData.id,
             "products": {
                 "$elemMatch": condition
@@ -579,7 +577,7 @@ exports.deleteCartItem = async (req, res) => {
         return res.send({
             message: "Item deleted successfully",
             success: 1
-        })
+        })*/
 
     } else {
         return res.send({
