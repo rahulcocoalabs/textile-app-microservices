@@ -524,15 +524,15 @@ exports.deleteCartItem = async (req, res) => {
                 })
             }
         }
-
+        var objDelete =  { $pull: { 'products': { productId: params.productId ,variantId:params.variantId} } }
 
         var deleteProductInCart = await Carts.updateOne({
             "_id": cartData.id,
             status: 1
 
         }, 
-            { $pull: { 'products': { productId: params.productId ,variantId:params.variantId} } 
-        })
+           objDelete
+            )
             .catch(err => {
                 return {
                     success: 0,
