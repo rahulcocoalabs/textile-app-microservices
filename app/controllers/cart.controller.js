@@ -61,6 +61,12 @@ exports.addToCart = async(req,res) => {
 
 
     // is cart exists 
+
+    let findCriteria = {};
+    findCriteria.isConvertedToOrder = false;
+    findCriteria.userId = userId;
+    findCriteria.status = 1;
+    
     var pendingCartExists = await Carts.findOne(findCriteria)
         .catch(err => {
             return {
