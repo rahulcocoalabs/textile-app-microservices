@@ -173,12 +173,19 @@ exports.addToCart = async (req, res) => {
                 // },
                 status: 1
 
-            }, {
-                "$set": {
-                    "products.quantity": quantity,
-                    "products.totalPrice": totalPrice,
-                }
-            }, {
+             },// {
+            //     "$set": {
+            //         "products.$[outer].quantity": quantity,
+            //         "products.$[outer].totalPrice": totalPrice,
+            //     }
+            // }, 
+            {
+                    
+                        "products.quantity": quantity,
+                        "products.totalPrice": totalPrice,
+                   
+                }, 
+            {
                 "arrayFilters": [arrayFilterObj]
             })
                 .catch(err => {
