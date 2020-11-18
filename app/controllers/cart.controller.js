@@ -587,7 +587,7 @@ exports.getCartCount = async (req, res) => {
     }
     if (cartData && cartData.products && cartData.products.length > 0) {
         var products = cartData.products;
-        products = products.filter(x => x.status == 1);
+        //products = products.filter(x => x.status == 1);
         return res.send({
             success: 1,
             count: products.length,
