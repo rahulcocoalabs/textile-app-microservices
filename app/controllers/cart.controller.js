@@ -14,7 +14,86 @@ var cartConfig = config.cart;
 var productsConfig = config.products;
 
 
-exports.addToCart = async (req, res) => {
+exports.addToCart = async(req,res) => {
+
+    var params = req.body;
+    let userDataz = req.identity.data;
+    let userId = userDataz.id;
+
+    if (!params.productId || (params.isVariant === undefined) || (params.isVariant && !params.variantId) || !params.count) {
+        var errors = [];
+        let message = "";
+        if (!params.productId) {
+            errors.push({
+                field: "productId",
+                message: "Require product id"
+            });
+            message = "Require product id";
+        }
+        if (!params.isVariant) {
+            errors.push({
+                field: "isVarient",
+                message: "Require isVariant"
+            });
+            message = "Require isVariant";
+        }
+        if (!params.variantId) {
+            errors.push({
+                field: "variantId",
+                message: "Require variantId"
+            });
+            message = "Require variantId";
+        }
+        if (!params.count) {
+            errors.push({
+                field: "count",
+                message: "Require product count"
+            });
+            message = "Require product count";
+        }
+        return res.send({
+            success: 0,
+            statusCode: 400,
+            message,
+            errors: errors,
+        });
+    }
+
+
+    // is cart exists 
+    var pendingCartExists = await Carts.findOne(findCriteria)
+        .catch(err => {
+            return {
+                success: 0,
+                message: 'Something went wrong while checking cart',
+                error: err
+            }
+        })
+
+    if (pendingCartExists && (pendingCartExists.success !== undefined) && (pendingCartExists.success === 0)) {
+        return res.send(pendingCartExists);
+    }
+
+    if (pendingCartExists){
+
+        if (pendingCartExists.products){
+
+            return res.send(pendingCartExists.products)
+        }
+    }
+
+    // product exists in cart
+
+    // if 
+
+    // add new object to products array
+
+    // else 
+
+    // add quantity and price 
+}
+
+exports.addToCart1 = async (req, res) => {
     var params = req.body;
     let userDataz = req.identity.data;
     let userId = userDataz.id;
@@ -66,6 +145,9 @@ exports.addToCart = async (req, res) => {
     findCriteria.isConvertedToOrder = false;
     findCriteria.userId = userId;
     findCriteria.status = 1;
+
+
+
 
     var pendingCartExists = await Carts.findOne(findCriteria)
         .catch(err => {
