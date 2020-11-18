@@ -130,7 +130,7 @@ exports.checkout = async (req, res) => {
                     }
                 ]
                 update.orderDate =  Date.now();
-                update.orderStatus = constants.PENDING_ORDER;
+                update.orderStatus = "Pending"//constants.PENDING_ORDER;
                 update.tsModifiedAt = Date.now();
 
                 return res.send({
