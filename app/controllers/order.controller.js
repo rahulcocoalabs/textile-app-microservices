@@ -133,6 +133,10 @@ exports.checkout = async (req, res) => {
                 update.orderStatus = constants.PENDING_ORDER;
                 update.tsModifiedAt = Date.now();
 
+                return res.send({
+                    item:update
+                })
+
                 var updateCart = await CartModel.updateOne(findCriteria, update)
                     .catch(err => {
                         return {
@@ -275,7 +279,7 @@ exports.getOrderDetail = async(req,res) =>{
     var projection = {
         status : 0,
         tsModifiedAt : 0,
-
+        
         isConvertedToOrder : 0,
         
     }
