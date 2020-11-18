@@ -528,9 +528,6 @@ exports.deleteCartItem = async (req, res) => {
 
         var deleteProductInCart = await Carts.updateOne({
             "_id": cartData.id,
-            "products": {
-                "$elemMatch": condition
-            },
             status: 1
 
         }, 
