@@ -106,6 +106,13 @@ module.exports = {
         
             if(productCheck.stockAvailable >= data.count){
                 var totalPrice = productCheck.sellingPrice * data.count;
+                console.log(totalPrice);
+                return res.send(
+                    {
+                        totalPrice,
+                        productCheck
+                    }
+                )
                 productObj.totalPrice = totalPrice;   
                 productObj.isReviewable = false;
                 productObj.status = 1;       
