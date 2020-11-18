@@ -525,9 +525,9 @@ exports.deleteCartItem = async (req, res) => {
                 })
             }
         }
-        var objDelete =  { $pull: { 'products': { productId: params.productId ,variantId:params.variantId} } }
+        var objDelete =  { $pull: { 'products': { variantId:params.variantId} } }
 
-        return res.send(objDelete);
+       
         
         var deleteProductInCart = await Carts.updateOne({
             "_id": cartData.id,
