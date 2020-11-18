@@ -299,7 +299,7 @@ exports.showCart = async (req, res) => {
         return res.send(cartData);
     }
 
-    return res.send(cartData)
+   // return res.send(cartData)
     // cartData = JSON.parse(JSON.stringify(cartData));
     var products = [];
     var total = 0;
