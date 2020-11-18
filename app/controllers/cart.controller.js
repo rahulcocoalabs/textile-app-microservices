@@ -499,7 +499,7 @@ exports.deleteCartItem = async (req, res) => {
         var arrayFilterObj = {};
         var status = 0;
         if (params.productId && !params.variantId) {
-            var productIndex = await cartData.products.findIndex(product => (JSON.stringify(product.productId) === JSON.stringify(params.productId) && (product.status === 1)))
+            var productIndex = await cartData.products.findIndex(product => (JSON.stringify(product.productId) === JSON.stringify(params.productId) ))
             if (productIndex > -1) {
                 arrayFilterObj = {
                     "outer.productId": params.productId
@@ -512,7 +512,7 @@ exports.deleteCartItem = async (req, res) => {
             }
         }
         if (params.variantId) {
-            var productIndex = await cartData.products.findIndex(product => (JSON.stringify(product.variantId) === JSON.stringify(params.variantId) && (product.status === 1)));
+            var productIndex = await cartData.products.findIndex(product => (JSON.stringify(product.variantId) === JSON.stringify(params.variantId) ));
             if (productIndex > -1) {
                 arrayFilterObj = {
                     "outer.variantId": params.variantId,
@@ -524,6 +524,33 @@ exports.deleteCartItem = async (req, res) => {
                 })
             }
         }
+
+
+        var deleteProductInCart = await Carts.updateOne({
+            "_id": cartData.id,
+            "products": {
+                "$elemMatch": condition
+            },
+            status: 1
+
+        }, 
+            { $pull: { 'products': { productId: params.productId ,variantId:params.variantId} } 
+        })
+            .catch(err => {
+                return {
+                    success: 0,
+                    message: 'Something went wrong while remove product in cart',
+                    error: err
+                }
+            })
+
+        if (deleteProductInCart && (deleteProductInCart.success !== undefined) && (deleteProductInCart.success === 0)) {
+            return res.send(deleteProductInCart);
+        }
+        return res.send({
+            message: "Item deleted successfully",
+            success: 1
+        })
 
         var deleteProductInCart = await Carts.updateOne({
             "_id": cartData.id,
