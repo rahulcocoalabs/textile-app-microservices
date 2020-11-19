@@ -35,10 +35,7 @@ var otpConfig = paramsConfig.otp;
             const review = new ReviewModel({
                 status: 1,
                 content: params.review_message,
-                user:{
-                    name:user.name,
-                    avatar:user.image 
-                },
+                user:userId,
                 productId:params.product,
                 rating:params.rating,
                 tSCreatedAt: Date.now(),
