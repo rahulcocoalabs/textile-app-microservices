@@ -44,6 +44,8 @@ var otpConfig = paramsConfig.otp;
                 tSCreatedAt: Date.now(),
                 tSModifiedAt: null
             });
+
+            return res.send(review);
             var save_review = await review.save();
             return res.send({
                 success: 1,
