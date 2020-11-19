@@ -66,6 +66,7 @@ module.exports = {
                 if(variantCheck.stockAvailable >= data.count){
                     productObj.price = variantCheck.sellingPrice;       
                     var totalPrice = variantCheck.sellingPrice * data.count;
+                    
                     productObj.totalPrice = totalPrice;       
                     productObj.variant = variantCheck.size + ' ' + variantCheck.unit;       
                     productObj.isReviewable = false;
@@ -106,6 +107,8 @@ module.exports = {
         
             if(productCheck.stockAvailable >= data.count){
                 var totalPrice = productCheck.sellingPrice * data.count;
+                console.log(totalPrice);
+               
                 productObj.totalPrice = totalPrice;   
                 productObj.isReviewable = false;
                 productObj.status = 1;       

@@ -14,6 +14,91 @@ var cartConfig = config.cart;
 var productsConfig = config.products;
 
 
+exports.addToCart2 = async(req,res) => {
+
+    var params = req.body;
+    let userDataz = req.identity.data;
+    let userId = userDataz.id;
+
+    if (!params.productId || (params.isVariant === undefined) || (params.isVariant && !params.variantId) || !params.count) {
+        var errors = [];
+        let message = "";
+        if (!params.productId) {
+            errors.push({
+                field: "productId",
+                message: "Require product id"
+            });
+            message = "Require product id";
+        }
+        if (!params.isVariant) {
+            errors.push({
+                field: "isVarient",
+                message: "Require isVariant"
+            });
+            message = "Require isVariant";
+        }
+        if (!params.variantId) {
+            errors.push({
+                field: "variantId",
+                message: "Require variantId"
+            });
+            message = "Require variantId";
+        }
+        if (!params.count) {
+            errors.push({
+                field: "count",
+                message: "Require product count"
+            });
+            message = "Require product count";
+        }
+        return res.send({
+            success: 0,
+            statusCode: 400,
+            message,
+            errors: errors,
+        });
+    }
+
+
+    // is cart exists 
+
+    let findCriteria = {};
+    findCriteria.isConvertedToOrder = false;
+    findCriteria.userId = userId;
+    findCriteria.status = 1;
+
+    var pendingCartExists = await Carts.findOne(findCriteria)
+        .catch(err => {
+            return {
+                success: 0,
+                message: 'Something went wrong while checking cart',
+                error: err
+            }
+        })
+
+    if (pendingCartExists && (pendingCartExists.success !== undefined) && (pendingCartExists.success === 0)) {
+        return res.send(pendingCartExists);
+    }
+
+    if (pendingCartExists){
+
+        if (pendingCartExists.products){
+
+            return res.send(pendingCartExists.products)
+        }
+    }
+
+    // product exists in cart
+
+    // if 
+
+    // add new object to products array
+
+    // else 
+
+    // add quantity and price 
+}
+
 exports.addToCart = async (req, res) => {
     var params = req.body;
     let userDataz = req.identity.data;
@@ -66,6 +151,9 @@ exports.addToCart = async (req, res) => {
     findCriteria.isConvertedToOrder = false;
     findCriteria.userId = userId;
     findCriteria.status = 1;
+
+
+
 
     var pendingCartExists = await Carts.findOne(findCriteria)
         .catch(err => {
@@ -168,17 +256,24 @@ exports.addToCart = async (req, res) => {
         } else {
             var updateCart = await Carts.updateOne({
                 "_id": pendingCartExists.id,
-                "products": {
-                    "$elemMatch": condition
-                },
+                // "products": {
+                //     "$elemMatch": condition
+                // },
                 status: 1
 
-            }, {
-                "$set": {
-                    "products.$[outer].quantity": quantity,
-                    "products.$[outer].totalPrice": totalPrice,
-                }
-            }, {
+             },// {
+            //     "$set": {
+            //         "products.$[outer].quantity": quantity,
+            //         "products.$[outer].totalPrice": totalPrice,
+            //     }
+            // }, 
+            {
+                    
+                        "products.quantity": quantity,
+                        "products.totalPrice": totalPrice,
+                   
+                }, 
+            {
                 "arrayFilters": [arrayFilterObj]
             })
                 .catch(err => {
@@ -261,8 +356,8 @@ exports.showCart = async (req, res) => {
             "products.variantId": 1,
             "products.quantity": 1,
             
-            // "products.price": 1,
-            // "products.totalPrice": 1,
+            "products.price": 1,
+             "products.totalPrice": 1,
             // "products.variant": 1,
             // "products.status": 1,
             // "products.tsCreatedAt": 1,
@@ -299,14 +394,17 @@ exports.showCart = async (req, res) => {
         return res.send(cartData);
     }
 
+   // return res.send(cartData)
     // cartData = JSON.parse(JSON.stringify(cartData));
     var products = [];
     var total = 0;
     var cartId;
     if (cartData && cartData.products && cartData.products.length > 0) {
         products = cartData.products;
-        products = products.filter(x => x.status == 1);
-        products = JSON.parse(JSON.stringify(products))
+       // return res.send(products);
+        //products = products.filter(x => x.status == 1);
+      //  return res.send(products)
+       // products = JSON.parse(JSON.stringify(products))
         products = await stockHelper.setIsOutOfStock(products);
         total = await getTotal(products);
         cartId = cartData.id;
@@ -497,7 +595,7 @@ exports.deleteCartItem = async (req, res) => {
         var arrayFilterObj = {};
         var status = 0;
         if (params.productId && !params.variantId) {
-            var productIndex = await cartData.products.findIndex(product => (JSON.stringify(product.productId) === JSON.stringify(params.productId) && (product.status === 1)))
+            var productIndex = await cartData.products.findIndex(product => (JSON.stringify(product.productId) === JSON.stringify(params.productId) ))
             if (productIndex > -1) {
                 arrayFilterObj = {
                     "outer.productId": params.productId
@@ -510,7 +608,7 @@ exports.deleteCartItem = async (req, res) => {
             }
         }
         if (params.variantId) {
-            var productIndex = await cartData.products.findIndex(product => (JSON.stringify(product.variantId) === JSON.stringify(params.variantId) && (product.status === 1)));
+            var productIndex = await cartData.products.findIndex(product => (JSON.stringify(product.variantId) === JSON.stringify(params.variantId) ));
             if (productIndex > -1) {
                 arrayFilterObj = {
                     "outer.variantId": params.variantId,
@@ -522,8 +620,32 @@ exports.deleteCartItem = async (req, res) => {
                 })
             }
         }
+        var objDelete =  { $pull: { 'products': { variantId:params.variantId} } }
 
+       
+        
         var deleteProductInCart = await Carts.updateOne({
+            "_id": cartData.id,
+            status: 1
+
+        }, objDelete )
+            .catch(err => {
+                return {
+                    success: 0,
+                    message: 'Something went wrong while remove product in cart',
+                    error: err
+                }
+            })
+
+        if (deleteProductInCart && (deleteProductInCart.success !== undefined) && (deleteProductInCart.success === 0)) {
+            return res.send(deleteProductInCart);
+        }
+        return res.send({
+            message: "Item deleted successfully",
+            success: 1
+        })
+
+       /* var deleteProductInCart = await Carts.updateOne({
             "_id": cartData.id,
             "products": {
                 "$elemMatch": condition
@@ -552,7 +674,7 @@ exports.deleteCartItem = async (req, res) => {
         return res.send({
             message: "Item deleted successfully",
             success: 1
-        })
+        })*/
 
     } else {
         return res.send({
@@ -585,7 +707,7 @@ exports.getCartCount = async (req, res) => {
     }
     if (cartData && cartData.products && cartData.products.length > 0) {
         var products = cartData.products;
-        products = products.filter(x => x.status == 1);
+        //products = products.filter(x => x.status == 1);
         return res.send({
             success: 1,
             count: products.length,
