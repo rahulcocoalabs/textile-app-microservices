@@ -37,7 +37,7 @@ var otpConfig = paramsConfig.otp;
                 content: params.review_message,
                 user:{
                     name:user.name,
-                    avatar:user.image || "placeholder.jpg",
+                    avatar:user.image 
                 },
                 productId:params.product,
                 rating:params.rating,
