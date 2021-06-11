@@ -525,12 +525,12 @@ exports.create = async (req, res) => {
             message: "did not recieved mobile"
         });
     }
-    if (!req.file) {
-        return res.send({
-            success: 0,
-            message: "did not recieved image"
-        });
-    }
+    // if (!req.file) {
+    //     return res.send({
+    //         success: 0,
+    //         message: "did not recieved image"
+    //     });
+    // }
 
     let findCriteria = {};
 
