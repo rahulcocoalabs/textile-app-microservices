@@ -583,7 +583,7 @@ exports.create = async (req, res) => {
             name: params.name,
             email: params.email,
             mobile: params.mobile,
-            image: req.file.filename,
+            //image: req.file.filename,
             passwordHash: passHash,
             isVerified: false,
             isBlocked: false,
