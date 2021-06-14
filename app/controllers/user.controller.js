@@ -621,7 +621,7 @@ exports.create = async (req, res) => {
             id: saveuser._id,
             token,
             userInfo: payload,
-            message: 'Profile tSCreatedAt successfully'
+            message: 'Profile  successfully'
         });
 
 
