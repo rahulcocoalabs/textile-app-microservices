@@ -6,8 +6,7 @@ module.exports = {
     checkProduct: async function (data,res) {
 
 
-        console.log('15/06')
-        console.log(data);
+        
       
         var productObj = {
             productId : data.productId,
