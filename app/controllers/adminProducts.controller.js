@@ -605,7 +605,7 @@ exports.addVariant = async (req, res) => {
         stockAvailable: params.stockAvailable,
         color: params.color,
         size: params.size,
-        productId: productId,
+        parent: productId,
         status: 1,
         sellingPrice: params.sellingPrice,
         costPrice: params.costPrice,
